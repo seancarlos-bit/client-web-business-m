@@ -1,0 +1,11 @@
+{
+  "name": "client-web-business-m",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Bespoke Web Engineering & High-Converting Brand Flagships for Vanguard Studio",
+  "scripts": {
+    "build": "powershell -ExecutionPolicy Bypass -File build.ps1 -Mode Preview",
+    "preview": "powershell -ExecutionPolicy Bypass -File build.ps1 -Mode Preview -Serve",
+    "serve": "python -m http.server 3000 --directory dist"
+  }
+}

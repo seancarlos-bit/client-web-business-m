@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>About Us &bull; Vanguard Studio Philosophy &amp; Lead Architect</title>
+  <meta name="description" content="Learn about Vanguard Studio's independent web engineering philosophy, direct lead architect model (Sean Carlos), guaranteed 10–14 day delivery SLA, zero-WordPress stack, and 100% IP assignment." />
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='16' fill='%23141311'/%3E%3Ctext x='16' y='21' font-family='serif' font-size='16' font-style='italic' fill='%23FAF9F6' text-anchor='middle'%3EV%3C/text%3E%3C/svg%3E" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/site.min.css" />
+</head>
+<body id="top" class="font-sans antialiased selection:bg-amber-400 selection:text-stone-950 bg-[#131211] text-[#ede9e1] relative">
+
+  <!-- TOP HEADER / MULTI-TAB TAXONOMY NAV -->
+  <header class="border-b border-white/10 bg-[#131211]/85 sticky top-0 z-40 backdrop-blur-md">
+    <div class="max-w-6xl mx-auto px-6 h-20 flex items-center justify-between">
+      <a href="index.html" class="flex items-center gap-3" aria-label="Vanguard Studio Homepage">
+        <span class="w-7 h-7 rounded-full bg-stone-50 flex items-center justify-center text-stone-950 font-serif italic text-sm font-bold">V</span>
+        <span class="font-serif text-lg tracking-tight font-medium text-white">Vanguard <span class="text-amber-400 font-sans text-xs tracking-widest uppercase ml-1">STUDIO</span></span>
+      </a>
+
+      <nav aria-label="Primary Navigation" class="hidden md:flex items-center gap-8 text-xs font-mono uppercase tracking-widest text-stone-300">
+        <a href="index.html" class="hover:text-white transition-colors">Home</a>
+        <a href="web-expertise.html" class="hover:text-white transition-colors">Web Expertise</a>
+        <a href="portfolio.html" class="hover:text-white transition-colors">Website Portfolio</a>
+        
+        <div id="exploreMenu" class="relative group">
+          <button id="exploreMenuButton" class="inline-flex items-center gap-1 hover:text-white transition-colors" aria-expanded="false" aria-haspopup="true">
+            <span class="font-semibold text-white">Explore More</span>
+            <span class="text-[10px]">&darr;</span>
+          </button>
+          
+          <div id="exploreMenuPanel" class="absolute left-0 top-full mt-2 w-64 p-2 rounded-xl bg-[#1c1a18]/95 backdrop-blur-xl opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 shadow-2xl border border-white/10 z-50 space-y-1">
+            <a href="about.html" class="flex items-center justify-between px-3 py-2 rounded-lg text-xs font-mono text-white bg-white/10">
+              <div>
+                <div class="font-semibold text-white">About Us</div>
+                <div class="text-[10px] text-stone-400 font-sans">Independent studio philosophy &amp; lead architect</div>
+              </div>
+              <span class="text-[9px] bg-amber-400 text-stone-950 font-bold px-1.5 py-0.5 rounded">Studio</span>
+            </a>
+
+            <a href="customer-support.html" class="flex items-center justify-between px-3 py-2 rounded-lg text-xs font-mono text-stone-200 hover:bg-white/10 transition-colors">
+              <div>
+                <div class="font-semibold text-white">Customer Support</div>
+                <div class="text-[10px] text-stone-400 font-sans">Client portal &amp; edge hosting</div>
+              </div>
+              <span class="text-[9px] bg-emerald-950 text-emerald-300 border border-emerald-800 font-bold px-1.5 py-0.5 rounded">24/7 SLA</span>
+            </a>
+
+            <a href="insights.html" class="flex items-center justify-between px-3 py-2 rounded-lg text-xs font-mono text-stone-200 hover:bg-white/10 transition-colors">
+              <div>
+                <div class="font-semibold text-white">Insights &amp; Ideas</div>
+                <div class="text-[10px] text-stone-400 font-sans">Architecture &amp; SEO articles</div>
+              </div>
+              <span class="text-[9px] bg-amber-950 text-amber-300 border border-amber-800 font-bold px-1.5 py-0.5 rounded">Articles</span>
+            </a>
+
+            <a href="standalone.html" class="flex items-center justify-between px-3 py-2 rounded-lg text-xs font-mono text-stone-200 hover:bg-white/10 transition-colors">
+              <div>
+                <div class="font-semibold text-white">3D Scrollytelling</div>
+                <div class="text-[10px] text-stone-400 font-sans">36k kinetic GPU experience</div>
+              </div>
+              <span class="text-[9px] bg-amber-400 text-stone-950 font-bold px-1.5 py-0.5 rounded">WebGL GPU</span>
+            </a>
+
+            <a href="contact.html" class="flex items-center justify-between px-3 py-2 rounded-lg text-xs font-mono text-white font-semibold hover:bg-white/10 transition-colors">
+              <span>Contact Us</span>
+              <span class="text-[9px] bg-stone-50 text-stone-950 font-bold px-1.5 py-0.5 rounded">Direct Inquiry &rarr;</span>
+            </a>
+          </div>
+        </div>
+      </nav>
+
+      <div class="flex items-center gap-3">
+        <a href="contact.html" class="inline-flex items-center justify-center min-h-[44px] px-5 py-2.5 rounded-full bg-stone-50 text-stone-950 text-xs font-mono font-bold uppercase tracking-wider hover:bg-amber-300 transition-colors">
+          Book Free Audit &rarr;
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN CONTENT CONTAINER -->
+  <main id="main-content" class="py-20 max-w-4xl mx-auto px-6 space-y-16">
+    
+    <!-- Hero Header -->
+    <div class="text-center space-y-4">
+      <span class="text-xs font-mono uppercase tracking-widest text-amber-400">About Vanguard Studio</span>
+      <h1 class="font-serif text-4xl sm:text-5xl font-normal text-white">Engineering Digital Flagships Without Bloat</h1>
+      <p class="text-stone-300 text-base max-w-2xl mx-auto leading-relaxed">
+        Vanguard Studio is an independent web engineering practice led by Sean Carlos. We eliminate WordPress database bloat and third-party plugin debt, delivering custom static flagships compiled for maximum conversion and sub-second speed.
+      </p>
+    </div>
+
+    <!-- Core Philosophy Cards -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+      
+      <div class="cool-gray-glass rounded-2xl p-8 border border-white/15 space-y-4 shadow-2xl">
+        <div class="text-xs font-mono text-amber-400 uppercase tracking-widest font-bold">01 // Lead Architect Model</div>
+        <h2 class="font-serif text-2xl text-white font-normal">Direct Access to Sean Carlos</h2>
+        <p class="text-xs text-stone-300 leading-relaxed">
+          No account managers, bloated agency overhead, or junior handoffs. You work directly with lead architect Sean Carlos (<strong class="text-white">vanguardstudio.sample@gmail.com</strong>) from scope discovery through production deployment.
+        </p>
+      </div>
+
+      <div class="cool-gray-glass rounded-2xl p-8 border border-white/15 space-y-4 shadow-2xl">
+        <div class="text-xs font-mono text-amber-400 uppercase tracking-widest font-bold">02 // Guaranteed Turnaround</div>
+        <h2 class="font-serif text-2xl text-white font-normal">10&ndash;14 Day Milestone Delivery</h2>
+        <p class="text-xs text-stone-300 leading-relaxed">
+          Every project operates on a fixed timeline SLA with clear milestone deliverables: 50% upfront deposit and 50% upon verified production launch.
+        </p>
+      </div>
+
+      <div class="cool-gray-glass rounded-2xl p-8 border border-white/15 space-y-4 shadow-2xl">
+        <div class="text-xs font-mono text-amber-400 uppercase tracking-widest font-bold">03 // Zero Database Bloat</div>
+        <h2 class="font-serif text-2xl text-white font-normal">Compiled Static Architecture</h2>
+        <p class="text-xs text-stone-300 leading-relaxed">
+          We compile code directly to static HTML5 and global edge CDNs. Pages load instantly on mobile, boosting Google SEO rankings and eliminating database security hacks.
+        </p>
+      </div>
+
+      <div class="cool-gray-glass rounded-2xl p-8 border border-white/15 space-y-4 shadow-2xl">
+        <div class="text-xs font-mono text-amber-400 uppercase tracking-widest font-bold">04 // 100% IP Ownership</div>
+        <h2 class="font-serif text-2xl text-white font-normal">Full Client Asset Assignment</h2>
+        <p class="text-xs text-stone-300 leading-relaxed">
+          You own 100% of your source code, design assets, and domain infrastructure upon final payment. No vendor lock-in or proprietary licensing traps.
+        </p>
+      </div>
+
+    </div>
+
+    <!-- CTA Card -->
+    <div class="cool-gray-glass rounded-3xl p-10 border border-amber-400/30 text-center space-y-6 shadow-2xl">
+      <h2 class="font-serif text-3xl text-white font-normal">Ready to Build Your Digital Flagship?</h2>
+      <p class="text-stone-300 text-sm max-w-lg mx-auto">
+        Discuss your scope directly with Sean Carlos or request a free video technical audit for your current website.
+      </p>
+      <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+        <a href="contact.html" class="inline-flex items-center justify-center px-8 py-3.5 rounded-full bg-stone-50 text-stone-950 text-xs font-mono font-bold uppercase tracking-wider hover:bg-amber-300 transition-colors">
+          Start Project Enquiry &rarr;
+        </a>
+        <a href="mailto:vanguardstudio.sample@gmail.com" class="inline-flex items-center justify-center px-8 py-3.5 rounded-full bg-stone-900 border border-white/20 text-white text-xs font-mono font-semibold hover:border-amber-400 transition-colors">
+          Direct Email SLA &rarr;
+        </a>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- COMPREHENSIVE 5-COLUMN DIRECTORY FOOTER -->
+  <footer class="border-t border-white/10 bg-[#0d0c0b]/90 text-stone-300 pt-20 pb-12 relative z-10" aria-label="Footer Directory">
+    <div class="max-w-6xl mx-auto px-6">
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-10 pb-16 border-b border-white/10 text-xs">
+        <div>
+          <h3 class="font-mono text-xs uppercase tracking-widest text-amber-400 mb-4 font-bold">Beginners &amp; Guides</h3>
+          <ul class="space-y-2.5 text-stone-400 font-sans">
+            <li><a href="insights.html" class="hover:text-white transition-colors">Building a Business Website Right</a></li>
+            <li><a href="insights.html" class="hover:text-white transition-colors">How to Promote Your Business Online</a></li>
+            <li><a href="insights.html" class="hover:text-white transition-colors">Best Tips on How to Design B2B Websites</a></li>
+            <li><a href="insights.html" class="hover:text-white transition-colors">Corporate Websites That Scale</a></li>
+            <li><a href="insights.html" class="hover:text-white transition-colors">Local Business Websites</a></li>
+            <li><a href="insights.html" class="hover:text-white transition-colors">E-Commerce &amp; Product Showcase</a></li>
+            <li><a href="insights.html" class="hover:text-white transition-colors">Industrial &amp; Manufacturing Sites</a></li>
+          </ul>
+        </div>
+        <div>
+          <h3 class="font-mono text-xs uppercase tracking-widest text-amber-400 mb-4 font-bold">Complementary Services</h3>
+          <ul class="space-y-2.5 text-stone-400 font-sans">
+            <li><a href="web-expertise.html" class="hover:text-white transition-colors">Brand Identity for Business</a></li>
+            <li><a href="customer-support.html" class="hover:text-white transition-colors">Edge Hosting &amp; SSL Management</a></li>
+            <li><a href="customer-support.html" class="hover:text-white transition-colors">Domain Portfolio Management</a></li>
+            <li><a href="customer-support.html" class="hover:text-white transition-colors">Security Maintenance &amp; SLAs</a></li>
+            <li><a href="web-expertise.html" class="hover:text-white transition-colors">Monthly Core Web Vitals Auditing</a></li>
+          </ul>
+        </div>
+        <div>
+          <h3 class="font-mono text-xs uppercase tracking-widest text-amber-400 mb-4 font-bold">Web Services</h3>
+          <ul class="space-y-2.5 text-stone-400 font-sans">
+            <li><a href="web-expertise.html" class="hover:text-white transition-colors">Custom Web Design</a></li>
+            <li><a href="web-expertise.html" class="hover:text-white transition-colors">Bespoke Digital Engineering</a></li>
+            <li><a href="portfolio.html" class="hover:text-white transition-colors">E-Commerce &amp; Digital Storefronts</a></li>
+            <li><a href="standalone.html" class="hover:text-white transition-colors">Interactive Web Applications</a></li>
+            <li><a href="web-expertise.html" class="hover:text-white transition-colors">Content Management Systems</a></li>
+            <li><a href="customer-support.html" class="hover:text-white transition-colors">Website Maintenance &amp; SLAs</a></li>
+          </ul>
+        </div>
+        <div>
+          <h3 class="font-mono text-xs uppercase tracking-widest text-amber-400 mb-4 font-bold">Main Packages</h3>
+          <ul class="space-y-2.5 text-stone-400 font-sans">
+            <li><a href="index.html#calculator-section" class="hover:text-white transition-colors font-semibold">Starter Presence ($799)</a></li>
+            <li><a href="index.html#calculator-section" class="hover:text-white transition-colors font-semibold">Commercial Flagship ($1,499)</a></li>
+            <li><a href="portfolio.html" class="hover:text-white transition-colors">Tier 1: Single-Page Sites</a></li>
+            <li><a href="portfolio.html" class="hover:text-white transition-colors">Tier 2: Corporate Platforms</a></li>
+            <li><a href="portfolio.html" class="hover:text-white transition-colors">Tier 3: CMS &amp; Media Hubs</a></li>
+            <li><a href="portfolio.html" class="hover:text-white transition-colors">Tier 4: Operational Portals</a></li>
+            <li><a href="portfolio.html" class="hover:text-white transition-colors">Tier 5: E-Commerce Platforms</a></li>
+          </ul>
+        </div>
+        <div>
+          <h3 class="font-mono text-xs uppercase tracking-widest text-amber-400 mb-4 font-bold">Quick Links</h3>
+          <ul class="space-y-2.5 text-stone-400 font-sans">
+            <li><a href="index.html" class="hover:text-white transition-colors">Home</a></li>
+            <li><a href="about.html" class="hover:text-white transition-colors font-semibold text-white">About Us</a></li>
+            <li><a href="web-expertise.html" class="hover:text-white transition-colors">Web Expertise</a></li>
+            <li><a href="portfolio.html" class="hover:text-white transition-colors">Website Portfolio</a></li>
+            <li><a href="customer-support.html" class="hover:text-white transition-colors">Customer Support</a></li>
+            <li><a href="insights.html" class="hover:text-white transition-colors">Insights &amp; Ideas</a></li>
+            <li><a href="contact.html" class="hover:text-white transition-colors font-semibold">Contact Us</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="pt-8 flex flex-col md:flex-row items-center justify-between gap-6 text-xs font-mono text-stone-400 border-b border-white/10 pb-8">
+        <div class="flex flex-wrap gap-4 text-[11px]">
+          <span>Direct Lead Intake: <a href="mailto:vanguardstudio.sample@gmail.com" class="text-white hover:underline font-bold">vanguardstudio.sample@gmail.com</a></span>
+          <span>&bull;</span>
+          <span>10&ndash;14 Days Guaranteed Delivery</span>
+          <span>&bull;</span>
+          <span>100% Intellectual Property Assignment</span>
+        </div>
+        <a href="#top" class="hover:text-white transition-colors font-bold flex items-center gap-1 text-white">
+          <span>TOP</span>
+          <span>&uarr;</span>
+        </a>
+      </div>
+
+      <div class="pt-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs font-mono text-stone-500">
+        <div>&copy; 2026 VANGUARD STUDIO. ALL RIGHTS RESERVED.</div>
+        <div class="flex items-center gap-6">
+          <a href="privacy.html" class="hover:text-white transition-colors">Privacy Policy</a>
+          <a href="terms.html" class="hover:text-white transition-colors">Terms of Service</a>
+          <a href="accessibility.html" class="hover:text-white transition-colors">Accessibility Statement</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <div id="livechat-container"></div>
+  <script src="js/motion.js"></script>
+  <script src="js/navigation.js"></script>
+  <script src="js/calculator.js"></script>
+  <script src="js/form.js"></script>
+  <script src="js/livechat.js"></script>
+</body>
+</html>

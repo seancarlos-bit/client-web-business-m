@@ -1,0 +1,2170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BRAINWEB — 3D Particle Scrollytelling (Standalone) | Collective Intelligence</title>
+  <meta name="description" content="Awwwards-grade 3D particle scrollytelling experience morphing 36,000 GPU particles across intelligence, chaos, ideation, and planetary reach." />
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cpolygon points='16,4 28,28 4,28' fill='%23ffffff'/%3E%3C/svg%3E" />
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Production Libraries via Global CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.9/dist/lenis.min.js"></script>
+
+  <style>
+    :root {
+      /* Edition A: Natural Earth & Espresso (Warm Luxury Architectural) */
+      --bg-primary: #131211;
+      --bg-scrim: radial-gradient(ellipse at center, rgba(28, 26, 24, 0.88) 0%, rgba(19, 18, 17, 0) 72%);
+      --text-primary: #ede9e1;
+      --text-muted: #a89f91;
+      --text-dim: #736b60;
+      --text-accent: #ebdcb8;
+      --card-bg: rgba(26, 24, 22, 0.78);
+      --card-border: rgba(237, 233, 225, 0.09);
+      --glass-blur: blur(24px);
+      --pill-bg: #ede9e1;
+      --pill-text: #131211;
+      --pill-hover: #dfd9ce;
+      --nav-bg: rgba(19, 18, 17, 0.82);
+      --rail-line: rgba(237, 233, 225, 0.14);
+      --rail-active: #ede9e1;
+      --hud-bg: rgba(26, 24, 22, 0.80);
+    }
+
+    body.theme-light {
+      /* Edition B: Inverted Architectural Monochrome (Editorial Light Mode) */
+      --bg-primary: #fafaf9;
+      --bg-scrim: radial-gradient(ellipse at center, rgba(250, 250, 249, 0.88) 0%, rgba(250, 250, 249, 0) 70%);
+      --text-primary: #14161a;
+      --text-muted: #575e6b;
+      --text-dim: #8b94a0;
+      --text-accent: #2c313a;
+      --card-bg: rgba(255, 255, 255, 0.32);
+      --card-border: rgba(0, 0, 0, 0.08);
+      --glass-blur: blur(14px);
+      --pill-bg: #000000;
+      --pill-text: #ffffff;
+      --pill-hover: #1f2329;
+      --nav-bg: rgba(250, 250, 249, 0.85);
+      --rail-line: rgba(20, 22, 26, 0.15);
+      --rail-active: #14161a;
+      --hud-bg: rgba(255, 255, 255, 0.65);
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      background-color: var(--bg-primary);
+      color: var(--text-primary);
+      font-family: 'Inter', 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      transition: background-color 0.4s ease, color 0.4s ease;
+      overflow-x: hidden;
+    }
+
+    body {
+      min-height: 100vh;
+      position: relative;
+      background-color: var(--bg-primary);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    #webgl-canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 0;
+      pointer-events: auto;
+    }
+
+    .header-nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 50;
+      padding: 1.25rem 2.8rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: var(--nav-bg);
+      backdrop-filter: var(--glass-blur);
+      -webkit-backdrop-filter: var(--glass-blur);
+      border-bottom: 1px solid var(--card-border);
+      transition: background 0.4s ease, border-color 0.4s ease;
+    }
+
+    .brand-wrapper {
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+      text-decoration: none;
+      color: var(--text-primary);
+      cursor: pointer;
+    }
+
+    .brand-glyph {
+      color: #ffffff;
+      transition: transform 0.3s ease;
+    }
+
+    .brand-wrapper:hover .brand-glyph {
+      transform: scale(1.15);
+    }
+
+    .brand-title {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 0.92rem;
+      font-weight: 800;
+      letter-spacing: 0.12em;
+      color: var(--text-primary);
+    }
+
+    .nav-center-links {
+      display: flex;
+      align-items: center;
+      gap: 2.2rem;
+    }
+
+    .nav-link {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 0.74rem;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      color: #717682;
+      text-decoration: none;
+      text-transform: uppercase;
+      transition: color 0.25s ease;
+      position: relative;
+      padding: 0.25rem 0;
+    }
+
+    .nav-link:hover, .nav-link.active {
+      color: #ffffff;
+    }
+
+    .nav-link.active::after {
+      content: '';
+      position: absolute;
+      bottom: -2px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 4px;
+      height: 4px;
+      border-radius: 50%;
+      background: #ffffff;
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 0.85rem;
+    }
+
+    .nav-pill-telemetry {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 0.45rem 0.95rem;
+      border-radius: 9999px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.7rem;
+      letter-spacing: 0.06em;
+      color: #cbd5e1;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
+
+    .telemetry-live-dot {
+      color: #f1f5f9;
+      font-size: 0.55rem;
+      opacity: 0.85;
+      animation: telemetry-pulse 2s infinite ease-in-out;
+    }
+
+    @keyframes telemetry-pulse {
+      0%, 100% { opacity: 0.6; transform: scale(0.9); }
+      50% { opacity: 1; transform: scale(1.25); }
+    }
+
+    .telemetry-sep {
+      opacity: 0.35;
+      margin: 0 0.1rem;
+    }
+
+    .nav-pill-audio {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 0.45rem 0.95rem;
+      border-radius: 9999px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.7rem;
+      letter-spacing: 0.08em;
+      color: #cbd5e1;
+      cursor: pointer;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      transition: all 0.25s ease;
+    }
+
+    .nav-pill-audio:hover {
+      background: rgba(255, 255, 255, 0.09);
+      border-color: rgba(255, 255, 255, 0.22);
+      color: #ffffff;
+    }
+
+    .nav-pill-audio.active {
+      background: rgba(255, 255, 255, 0.14);
+      border-color: rgba(255, 255, 255, 0.35);
+      color: #ffffff;
+    }
+
+    .audio-waves-icon {
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: -0.05em;
+    }
+
+    /* Theme / Edition Switcher Button */
+    .nav-pill-theme {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      padding: 0.45rem 0.95rem;
+      border-radius: 9999px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.7rem;
+      letter-spacing: 0.08em;
+      color: var(--text-accent);
+      cursor: pointer;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      transition: all 0.25s ease;
+    }
+
+    .nav-pill-theme:hover {
+      background: rgba(255, 255, 255, 0.12);
+      border-color: rgba(255, 255, 255, 0.28);
+      color: var(--text-primary);
+    }
+
+    .theme-icon {
+      font-size: 0.82rem;
+      opacity: 0.9;
+    }
+
+    body.theme-light .nav-pill-theme {
+      background: rgba(0, 0, 0, 0.04);
+      border: 1px solid rgba(0, 0, 0, 0.12);
+      color: #14161a;
+    }
+
+    body.theme-light .nav-pill-theme:hover {
+      background: rgba(0, 0, 0, 0.08);
+      border-color: rgba(0, 0, 0, 0.22);
+    }
+
+    .cta-pill-btn {
+      background: var(--pill-bg);
+      color: var(--pill-text);
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 0.76rem;
+      font-weight: 800;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      padding: 0.52rem 1.4rem;
+      border-radius: 9999px;
+      text-decoration: none;
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: 0 4px 16px rgba(255, 255, 255, 0.15);
+      display: inline-flex;
+      align-items: center;
+    }
+
+    .cta-pill-btn:hover {
+      background: var(--pill-hover);
+      transform: translateY(-1px);
+      box-shadow: 0 6px 24px rgba(255, 255, 255, 0.25);
+    }
+
+    .floating-stage-badge {
+      position: fixed;
+      right: 2.2rem;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 45;
+      display: flex;
+      align-items: center;
+      gap: 0.65rem;
+      padding: 0.5rem 1.15rem;
+      background: rgba(14, 14, 16, 0.82);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 9999px;
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.45);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.7rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      color: #e2e8f0;
+      pointer-events: auto;
+      transition: all 0.3s ease;
+    }
+
+    .floating-stage-badge:hover {
+      border-color: rgba(255, 255, 255, 0.3);
+      transform: translateY(-50%) translateX(-2px);
+    }
+
+    .stage-badge-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #ffffff;
+      box-shadow: 0 0 8px rgba(255, 255, 255, 0.9);
+      animation: pulse-dot 2.5s infinite ease-in-out;
+    }
+
+    @keyframes pulse-dot {
+      0%, 100% { opacity: 0.5; transform: scale(0.9); }
+      50% { opacity: 1; transform: scale(1.2); }
+    }
+
+    .scrolly-tracker-rail {
+      position: fixed;
+      right: 0.9rem;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 40;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      pointer-events: none;
+    }
+
+    .tracker-item {
+      display: flex;
+      align-items: center;
+      pointer-events: auto;
+      cursor: pointer;
+      opacity: 0.35;
+      transition: opacity 0.35s ease, transform 0.35s ease;
+      padding: 4px;
+    }
+
+    .tracker-item.active {
+      opacity: 1;
+      transform: scale(1.2);
+    }
+
+    .tracker-dot {
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: var(--text-muted);
+      transition: all 0.35s ease;
+    }
+
+    .tracker-item.active .tracker-dot {
+      background: var(--rail-active);
+      transform: scale(1.5);
+      box-shadow: 0 0 8px var(--rail-active);
+    }
+
+    .scroll-container {
+      position: relative;
+      z-index: 10;
+      width: 100%;
+      pointer-events: none;
+    }
+
+    .story-section {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      padding: 6rem 3.5rem;
+      position: relative;
+      pointer-events: none;
+    }
+
+    .content-block {
+      pointer-events: auto;
+      max-width: 44rem;
+      width: 100%;
+      position: relative;
+      z-index: 20;
+    }
+
+    .frosted-obsidian-card {
+      background: var(--card-bg);
+      backdrop-filter: var(--glass-blur);
+      -webkit-backdrop-filter: var(--glass-blur);
+      border: 1px solid var(--card-border);
+      border-radius: 24px;
+      padding: 3.5rem 3rem 3rem 3rem;
+      box-shadow: 0 24px 70px -12px rgba(0, 0, 0, 0.85);
+      margin: 0 auto;
+      text-align: center;
+      position: relative;
+      transition: border-color 0.35s ease;
+    }
+
+    .frosted-obsidian-card:hover {
+      border-color: rgba(255, 255, 255, 0.14);
+    }
+
+    .frosted-obsidian-card.align-left {
+      text-align: left;
+    }
+
+    .eyebrow-tag {
+      display: inline-block;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.72rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+      color: var(--text-muted);
+      margin-bottom: 1.4rem;
+    }
+
+    .editorial-headline {
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      font-size: clamp(2.4rem, 4.6vw, 3.8rem);
+      font-weight: 700;
+      line-height: 1.08;
+      letter-spacing: -0.035em;
+      color: var(--text-primary);
+      margin-bottom: 1.4rem;
+    }
+
+    .editorial-body {
+      font-size: 0.98rem;
+      line-height: 1.65;
+      color: var(--text-muted);
+      margin-bottom: 2rem;
+      font-weight: 400;
+    }
+
+    .chaos-paragraph {
+      max-width: 36rem;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    /* 4 Entropy Pill Badges (2x2 Grid matching reference screenshot) */
+    .entropy-pills-grid {
+      display: grid;
+      grid-template-columns: repeat(2, auto);
+      justify-content: center;
+      gap: 0.75rem 1.15rem;
+      margin-bottom: 2.4rem;
+    }
+
+    .entropy-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.55rem;
+      padding: 0.45rem 1.15rem;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 9999px;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 0.78rem;
+      font-weight: 500;
+      color: #e2e8f0;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      transition: all 0.25s ease;
+    }
+
+    .entropy-pill:hover {
+      background: rgba(255, 255, 255, 0.08);
+      border-color: rgba(255, 255, 255, 0.25);
+      transform: translateY(-1px);
+    }
+
+    .pill-bullet {
+      font-size: 0.52rem;
+      color: #94a3b8;
+    }
+
+    .card-action-wrap {
+      display: flex;
+      justify-content: center;
+    }
+
+    .frosted-obsidian-card.align-left .card-action-wrap {
+      justify-content: flex-start;
+    }
+
+    .witness-coherence-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.55rem 1.4rem;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      border-radius: 9999px;
+      color: #f1f5f9;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 0.82rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.25s ease;
+      backdrop-filter: blur(12px);
+    }
+
+    .witness-coherence-btn:hover {
+      background: rgba(255, 255, 255, 0.12);
+      border-color: rgba(255, 255, 255, 0.32);
+      transform: translateY(-1px);
+      color: #ffffff;
+    }
+
+    .section-left {
+      justify-content: flex-start;
+      padding-left: clamp(3rem, 8vw, 10rem);
+    }
+
+    .section-right {
+      justify-content: flex-end;
+      margin-right: clamp(7rem, 11vw, 13rem);
+    }
+
+    .section-center {
+      justify-content: center;
+      text-align: center;
+    }
+
+    .feature-cards-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.2rem;
+      margin-top: 1.8rem;
+    }
+
+    .frosted-card {
+      background: rgba(255, 255, 255, 0.03);
+      backdrop-filter: var(--glass-blur);
+      -webkit-backdrop-filter: var(--glass-blur);
+      border: 1px solid var(--card-border);
+      padding: 1.4rem;
+      border-radius: 16px;
+      transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .frosted-card:hover {
+      transform: translateY(-3px);
+      border-color: rgba(255, 255, 255, 0.25);
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.35);
+    }
+
+    .card-number {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.72rem;
+      color: var(--text-accent);
+      margin-bottom: 0.6rem;
+    }
+
+    .card-title {
+      font-size: 1.05rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 0.4rem;
+    }
+
+    .card-desc {
+      font-size: 0.84rem;
+      line-height: 1.5;
+      color: var(--text-muted);
+    }
+
+    .terminal-card {
+      background: rgba(255, 255, 255, 0.03);
+      backdrop-filter: var(--glass-blur);
+      border: 1px solid var(--card-border);
+      border-radius: 16px;
+      overflow: hidden;
+      margin-top: 2rem;
+    }
+
+    .terminal-header {
+      padding: 0.75rem 1.2rem;
+      background: rgba(0, 0, 0, 0.3);
+      border-bottom: 1px solid var(--card-border);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.68rem;
+      color: var(--text-muted);
+    }
+
+    .terminal-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #22c55e;
+    }
+
+    .terminal-body {
+      padding: 1.2rem;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.75rem;
+      line-height: 1.8;
+      color: var(--text-muted);
+    }
+
+    .terminal-body .term-line {
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .terminal-body .term-val {
+      color: var(--text-primary);
+      font-weight: 500;
+    }
+
+    .hover-hint {
+      position: fixed;
+      bottom: 2rem;
+      right: 2.5rem;
+      z-index: 40;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.68rem;
+      color: var(--text-muted);
+      background: var(--hud-bg);
+      backdrop-filter: var(--glass-blur);
+      padding: 0.4rem 0.85rem;
+      border-radius: 9999px;
+      border: 1px solid var(--card-border);
+      pointer-events: none;
+      opacity: 0.8;
+    }
+
+    @media (max-width: 1024px) {
+      .section-right { margin-right: clamp(4rem, 6vw, 6rem); }
+      .nav-center-links { gap: 1.4rem; }
+    }
+
+    @media (max-width: 768px) {
+      .header-nav { padding: 1rem 1.25rem; }
+      .nav-center-links { display: none; }
+      .floating-stage-badge { display: none; }
+      .hover-hint { display: none; }
+      .scrolly-tracker-rail { right: 0.8rem; gap: 0.8rem; }
+      .story-section { padding: 5rem 1.25rem; }
+      .section-left, .section-right, .section-center { padding-left: 1.25rem; padding-right: 1.25rem; margin-right: 0; }
+      .frosted-obsidian-card { padding: 2.2rem 1.5rem; }
+      .editorial-headline { font-size: 2.2rem; }
+      .feature-cards-grid { grid-template-columns: 1fr; }
+      .entropy-pills-grid { grid-template-columns: 1fr; }
+    }
+
+    /* Mobile 640px rule per specification (hide secondary telemetry, stack cleanly) */
+    @media (max-width: 640px) {
+      .nav-pill-telemetry { display: none; }
+      .header-nav { padding: 0.85rem 1.1rem; }
+      .nav-actions { gap: 0.5rem; }
+      .nav-pill-theme, .nav-pill-audio { padding: 0.4rem 0.75rem; font-size: 0.65rem; }
+      .cta-pill-btn { padding: 0.45rem 0.95rem; font-size: 0.68rem; }
+      .story-section { padding: 4.5rem 1rem; min-height: 90vh; }
+      .content-block { max-width: 100%; padding: 0; }
+      .frosted-obsidian-card { padding: 2rem 1.25rem; border-radius: 18px; }
+      .editorial-headline { font-size: clamp(1.85rem, 7.5vw, 2.3rem); letter-spacing: -0.025em; }
+      .feature-cards-grid { grid-template-columns: 1fr; gap: 0.85rem; }
+      .terminal-card { margin-top: 1.4rem; }
+    }
+  </style>
+</head>
+<body>
+  <canvas id="webgl-canvas"></canvas>
+
+  <!-- Editorial Top Navbar -->
+  <header class="header-nav">
+    <a href="#act-0" class="brand-wrapper" aria-label="Brainweb Homepage">
+      <svg class="brand-glyph" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+        <polygon points="12 2 22 20 2 20 12 2"></polygon>
+      </svg>
+      <span class="brand-title">BRAINWEB</span>
+    </a>
+
+    <!-- Center Navigation Links -->
+    <nav class="nav-center-links" aria-label="Main Navigation">
+      <a href="#act-0" class="nav-link active" data-stage="0">ATLAS</a>
+      <a href="#act-2" class="nav-link" data-stage="2">ENTROPY</a>
+      <a href="#act-3" class="nav-link" data-stage="3">IGNITION</a>
+      <a href="#act-4" class="nav-link" data-stage="4">NETWORK</a>
+    </nav>
+
+    <!-- Right Controls -->
+    <div class="nav-actions">
+      <div class="nav-pill-telemetry" aria-label="Live Telemetry">
+        <span class="telemetry-live-dot">●</span>
+        <span id="fps-val">144 FPS</span>
+        <span class="telemetry-sep">|</span>
+        <span>36K SYNAPSES</span>
+      </div>
+      <button id="audio-toggle-btn" class="nav-pill-audio" aria-label="Toggle Synthesizer Tone" type="button">
+        <span class="audio-waves-icon">···</span>
+        <span class="audio-label">AUDIO</span>
+      </button>
+      <button id="theme-toggle-btn" class="nav-pill-theme" aria-label="Toggle Aesthetic Edition" type="button">
+        <span class="theme-icon">◐</span>
+        <span id="theme-label" class="theme-label">EDITION A</span>
+      </button>
+      <a href="#act-4" class="cta-pill-btn">REQUEST ACCESS</a>
+    </div>
+  </header>
+
+  <!-- Floating Right Stage Indicator Badge -->
+  <aside class="floating-stage-badge" id="floating-stage-badge" aria-label="Current Stage Indicator">
+    <span class="stage-badge-label" id="stage-badge-label">01 // ATLAS COGNITION</span>
+    <span class="stage-badge-dot">●</span>
+  </aside>
+
+  <!-- Subtle Vertical Scrollytracker Dots Rail -->
+  <aside class="scrolly-tracker-rail" aria-label="Story Stage Tracker">
+    <div class="tracker-item active" data-target="act-0" title="Atlas">
+      <div class="tracker-dot"></div>
+    </div>
+    <div class="tracker-item" data-target="act-1" title="Profile">
+      <div class="tracker-dot"></div>
+    </div>
+    <div class="tracker-item" data-target="act-2" title="Entropy">
+      <div class="tracker-dot"></div>
+    </div>
+    <div class="tracker-item" data-target="act-3" title="Ignition">
+      <div class="tracker-dot"></div>
+    </div>
+    <div class="tracker-item" data-target="act-4" title="Network">
+      <div class="tracker-dot"></div>
+    </div>
+  </aside>
+
+  <!-- Mouse Hover Interaction Hint -->
+  <div class="hover-hint">
+    <span>✦</span> Hover model for localized surface tension
+  </div>
+
+  <!-- Scrollytelling Story Container (4 Narrative Moments) -->
+  <main class="scroll-container">
+    
+    <!-- ACT 1: Section 0 (p = 0.0) — Atlas / Intelligence -->
+    <section id="act-0" class="story-section section-left">
+      <div class="content-block">
+        <div class="frosted-obsidian-card align-left">
+          <span class="eyebrow-tag">ACT 01 // ATLAS COGNITION</span>
+          <h1 class="editorial-headline">
+            Unlock collective<br>wisdom.
+          </h1>
+          <p class="editorial-body">
+            Deep within the architectural folds of the human mind lies the blueprint for breakthrough execution. Symmetrical cerebral hemispheres pulsing with 36,000 GPU particles, synchronizing raw instinct into structured intuition.
+          </p>
+          <div class="card-action-wrap">
+            <a href="#act-1" class="witness-coherence-btn">Analyze Lateral Cortex &darr;</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ACT 1.5: Section 1 (p = 1.0) — Lateral Profile -->
+    <section id="act-1" class="story-section section-right">
+      <div class="content-block">
+        <div class="frosted-obsidian-card align-left">
+          <span class="eyebrow-tag">ACT 01.5 // PERSPECTIVE SHIFT</span>
+          <h2 class="editorial-headline">
+            Make decisions with<br>confidence.
+          </h2>
+          <p class="editorial-body">
+            Rotating to the lateral cortex. Deep gyri and sulci ridges modulate light across view-space Fresnel vectors. Complex problems dissolve when observed from the unhurried vantage point of architectural mastery.
+          </p>
+          <div class="card-action-wrap">
+            <a href="#act-2" class="witness-coherence-btn">Descend Into Entropy &darr;</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ACT 2: Section 2 (p = 2.0) — Workplace Entropy / Chaos Field -->
+    <section id="act-2" class="story-section section-center">
+      <div class="content-block">
+        <div class="frosted-obsidian-card">
+          <span class="eyebrow-tag">THE COST OF DISPERSAL</span>
+          <h2 class="editorial-headline chaos-title">
+            The impossible battle<br>
+            to make sense of this<br>
+            chaos.
+          </h2>
+          <p class="editorial-body chaos-paragraph">
+            Teams are confronted with the anxiety of bothering a busy coworker again, or aimlessly trying to connect the dots with incomplete context. Existing solutions are cumbersome and quickly become outdated. Yet another decaying system requiring continuous maintenance.
+          </p>
+          <div class="entropy-pills-grid">
+            <div class="entropy-pill">
+              <span class="pill-bullet">●</span>
+              <span>Fragmented Slack Threads</span>
+            </div>
+            <div class="entropy-pill">
+              <span class="pill-bullet">●</span>
+              <span>Stale Notion &amp; Confluence Docs</span>
+            </div>
+            <div class="entropy-pill">
+              <span class="pill-bullet">●</span>
+              <span>Orphaned Code Commits</span>
+            </div>
+            <div class="entropy-pill">
+              <span class="pill-bullet">●</span>
+              <span>Context Switching Debt</span>
+            </div>
+          </div>
+          <div class="card-action-wrap">
+            <a href="#act-3" class="witness-coherence-btn">Witness Coherence &darr;</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ACT 3: Section 3 (p = 3.0) — The Idea (Vintage Edison Bulb) -->
+    <section id="act-3" class="story-section section-right">
+      <div class="content-block">
+        <div class="frosted-obsidian-card align-left">
+          <span class="eyebrow-tag">ACT 03 // CLARITY IGNITION</span>
+          <h2 class="editorial-headline">
+            Spark lightbulb<br>moments.
+          </h2>
+          <p class="editorial-body">
+            From the swirling particulate cloud emerges a vintage Edison envelope tilted at -28°. Inside, a dual-arch tungsten filament ignites with radiant warm amber, channeling clarity from the surrounding noise.
+          </p>
+          <div class="feature-cards-grid">
+            <div class="frosted-card">
+              <div class="card-number">01 / FILAMENT</div>
+              <div class="card-title">Pure Coherence</div>
+              <div class="card-desc">Non-blowing additive blending preserves rich internal sulci and filament details.</div>
+            </div>
+            <div class="frosted-card">
+              <div class="card-number">02 / FOCUS</div>
+              <div class="card-title">Instant Insight</div>
+              <div class="card-desc">View-space repulsion clears an organic halo around typography for uncompromising legibility.</div>
+            </div>
+          </div>
+          <div class="card-action-wrap" style="margin-top: 1.8rem;">
+            <a href="#act-4" class="witness-coherence-btn">Expand Planetary Network &darr;</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ACT 4: Section 4 (p = 4.0) — Planetary Globe (Global Reach) -->
+    <section id="act-4" class="story-section section-left">
+      <div class="content-block">
+        <div class="frosted-obsidian-card align-left">
+          <span class="eyebrow-tag">ACT 04 // PLANETARY HORIZON</span>
+          <h2 class="editorial-headline">
+            Build a better<br>world of work.
+          </h2>
+          <p class="editorial-body">
+            Ideas born in isolation achieve their destiny through planetary reach. The particles condense into a rotating spherical Fibonacci lattice with recognizable continental topography and coordinate orbital rings.
+          </p>
+          
+          <div class="terminal-card">
+            <div class="terminal-header">
+              <span class="terminal-dot"></span>
+              <span>ORBITAL TELEMETRY — LIVE CLUSTER 0x7E</span>
+            </div>
+            <div class="terminal-body">
+              <div class="term-line">
+                <span>ACTIVE NODES:</span>
+                <span class="term-val">36,000 SPH POINTS</span>
+              </div>
+              <div class="term-line">
+                <span>AXIAL INCLINATION:</span>
+                <span class="term-val">23.5° CORONAL TILT</span>
+              </div>
+              <div class="term-line">
+                <span>LANDMASS RESOLUTION:</span>
+                <span class="term-val">EURASIA / AMERICAS / AFRICA</span>
+              </div>
+              <div class="term-line">
+                <span>FRAME BUDGET:</span>
+                <span class="term-val">&lt; 6.9ms (144 FPS HARDWARE)</span>
+              </div>
+            </div>
+          </div>
+          <div class="card-action-wrap" style="margin-top: 1.8rem;">
+            <a href="#act-0" class="witness-coherence-btn">Ascend To Origin &uarr;</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    // Embedded Standalone Engine
+    const PARTICLE_COUNT = 36000;
+
+    // 1. Brain Geometry Generator
+    function generateBrain(count) {
+      const positions = new Float32Array(count * 3);
+      const normals = new Float32Array(count * 3);
+      const hemiCount = 13500;
+      const cereCount = 2750;
+      const stemCount = count - (hemiCount * 2 + cereCount * 2);
+      let ptr = 0;
+
+      for (let side = -1; side <= 1; side += 2) {
+        for (let i = 0; i < hemiCount; i++) {
+          const u = (i + 0.5) / hemiCount;
+          const theta = Math.acos(1.0 - 1.96 * u);
+          const phi = (i * 2.3999632) % (Math.PI * 2);
+          const cosPhi = Math.cos(phi), sinPhi = Math.sin(phi);
+          const sinTheta = Math.sin(theta), cosTheta = Math.cos(theta);
+
+          let rX = 0.92 * sinTheta * Math.abs(sinPhi);
+          let rY = 0.95 * cosTheta + 0.15;
+          let rZ = 1.25 * sinTheta * cosPhi;
+          if (rZ > 0.0) rY += 0.05 * Math.sin(rZ * 1.5);
+          else rY -= 0.15 * Math.pow(Math.abs(rZ), 1.6);
+
+          const gyri = 0.13 * Math.sin(8.0 * theta) * Math.cos(7.0 * phi)
+                     + 0.08 * Math.cos(15.0 * theta + 0.4) * Math.sin(12.0 * phi)
+                     + 0.04 * Math.sin(24.0 * theta) * Math.cos(20.0 * phi);
+
+          const mod = 1.0 + gyri;
+          rX *= mod; rY *= (1.0 + gyri * 0.7); rZ *= mod;
+
+          const px = side * (Math.max(0.04, Math.abs(rX)) + 0.09);
+          const py = rY;
+          const pz = rZ;
+
+          let nx = px - side * 0.5 + side * gyri * 0.5;
+          let ny = py - 0.15 + gyri * 0.5;
+          let nz = pz + gyri * 0.5;
+          const len = Math.hypot(nx, ny, nz) || 1.0;
+
+          positions[ptr * 3] = px; positions[ptr * 3 + 1] = py; positions[ptr * 3 + 2] = pz;
+          normals[ptr * 3] = nx / len; normals[ptr * 3 + 1] = ny / len; normals[ptr * 3 + 2] = nz / len;
+          ptr++;
+        }
+      }
+
+      for (let side = -1; side <= 1; side += 2) {
+        for (let i = 0; i < cereCount; i++) {
+          const u = (i + 0.5) / cereCount;
+          const theta = Math.acos(1.0 - 2.0 * u);
+          const phi = (i * 2.3999632) % (Math.PI * 2);
+          let cx = 0.44 * Math.sin(theta) * Math.sin(phi);
+          let cy = 0.28 * Math.cos(theta);
+          let cz = 0.38 * Math.sin(theta) * Math.cos(phi);
+          const folia = 0.035 * Math.sin(cy * 40.0);
+          cx += folia; cy += folia * 0.5; cz += folia;
+
+          const px = side * (Math.abs(cx) + 0.22);
+          const py = cy - 0.62;
+          const pz = cz - 0.72;
+          const nx = px - side * 0.35;
+          const ny = py + 0.62;
+          const nz = pz + 0.72;
+          const len = Math.hypot(nx, ny, nz) || 1.0;
+
+          positions[ptr * 3] = px; positions[ptr * 3 + 1] = py; positions[ptr * 3 + 2] = pz;
+          normals[ptr * 3] = nx / len; normals[ptr * 3 + 1] = ny / len; normals[ptr * 3 + 2] = nz / len;
+          ptr++;
+        }
+      }
+
+      for (let i = 0; i < stemCount; i++) {
+        const v = i / stemCount;
+        const y = -0.4 - v * 0.95;
+        const angle = (i * 2.3999632) % (Math.PI * 2);
+        const taper = 0.30 - v * 0.14;
+        const zOffset = -0.15 - v * 0.12;
+
+        const px = Math.cos(angle) * taper;
+        const py = y;
+        const pz = Math.sin(angle) * (taper * 0.85) + zOffset;
+
+        let nx = Math.cos(angle);
+        let ny = -0.15;
+        let nz = Math.sin(angle);
+        const len = Math.hypot(nx, ny, nz) || 1.0;
+
+        positions[ptr * 3] = px; positions[ptr * 3 + 1] = py; positions[ptr * 3 + 2] = pz;
+        normals[ptr * 3] = nx / len; normals[ptr * 3 + 1] = ny / len; normals[ptr * 3 + 2] = nz / len;
+        ptr++;
+      }
+
+      return { positions, normals };
+    }
+
+    // 2. Chaos Geometry Generator
+    function generateChaos(count) {
+      const positions = new Float32Array(count * 3);
+      const normals = new Float32Array(count * 3);
+
+      function pNoise(x, y, z) {
+        const p = Math.sin(x * 12.9898 + y * 78.233 + z * 37.719) * 43758.5453;
+        return (p - Math.floor(p)) * 2.0 - 1.0;
+      }
+      function fbm(x, y, z) {
+        return 0.5 * pNoise(x, y, z) + 0.25 * pNoise(x * 2.0, y * 2.0, z * 2.0) + 0.125 * pNoise(x * 4.0, y * 4.0, z * 4.0);
+      }
+
+      for (let i = 0; i < count; i++) {
+        const theta = Math.acos(1.0 - 2.0 * ((i * 1.6180339) % 1.0));
+        const phi = (i * 2.3999632) % (Math.PI * 2.0);
+        const dist = Math.pow((i % 997) / 997, 0.6) * 4.8 + 0.4;
+
+        let px = dist * Math.sin(theta) * Math.cos(phi);
+        let py = dist * Math.sin(theta) * Math.sin(phi) * 0.75;
+        let pz = dist * Math.cos(theta);
+
+        px += fbm(px * 0.4, py * 0.4, pz * 0.4) * 1.8;
+        py += fbm(py * 0.4 + 11.2, pz * 0.4 - 5.7, px * 0.4 + 3.1) * 1.5;
+        pz += fbm(pz * 0.4 - 7.3, px * 0.4 + 8.4, py * 0.4 - 9.2) * 1.8;
+
+        const len = Math.hypot(px, py, pz) || 1.0;
+        positions[i * 3] = px; positions[i * 3 + 1] = py; positions[i * 3 + 2] = pz;
+        normals[i * 3] = px / len; normals[i * 3 + 1] = py / len; normals[i * 3 + 2] = pz / len;
+      }
+      return { positions, normals };
+    }
+
+    // 3. Bulb Geometry Generator
+    function generateBulb(count) {
+      const positions = new Float32Array(count * 3);
+      const normals = new Float32Array(count * 3);
+      const glassCount = 20000;
+      const baseCount = 8000;
+      const filamentCount = count - glassCount - baseCount;
+      let ptr = 0;
+
+      for (let i = 0; i < glassCount; i++) {
+        const u = i / glassCount;
+        const y = 1.35 - u * 1.70;
+        const angle = (i * 2.3999632) % (Math.PI * 2);
+        let rad = 0.0, nySlope = 0.0;
+        if (y > 0.45) {
+          const dy = y - 0.45;
+          rad = Math.sqrt(Math.max(0.01, 0.81 - dy * dy));
+          nySlope = dy / 0.90;
+        } else {
+          const t = (0.45 - y) / 0.80;
+          const s = t * t * (3.0 - 2.0 * t);
+          rad = 0.90 * (1.0 - s) + 0.48 * s;
+          nySlope = 0.52 * (6.0 * t * (1.0 - t));
+        }
+        const px = Math.cos(angle) * rad;
+        const py = y;
+        const pz = Math.sin(angle) * rad;
+        const len = Math.hypot(Math.cos(angle), nySlope, Math.sin(angle)) || 1.0;
+
+        positions[ptr * 3] = px; positions[ptr * 3 + 1] = py; positions[ptr * 3 + 2] = pz;
+        normals[ptr * 3] = Math.cos(angle) / len; normals[ptr * 3 + 1] = nySlope / len; normals[ptr * 3 + 2] = Math.sin(angle) / len;
+        ptr++;
+      }
+
+      for (let i = 0; i < baseCount; i++) {
+        const v = i / baseCount;
+        const y = -0.35 - v * 0.80;
+        const angle = (i * 2.3999632) % (Math.PI * 2);
+        let rad = 0.48, ny = 0.0;
+        if (y > -0.92) {
+          const helixPhase = angle + (y + 0.35) * 26.0;
+          rad = 0.47 + Math.sin(helixPhase) * 0.042;
+          ny = Math.cos(helixPhase) * 0.15;
+        } else {
+          const t = (-0.92 - y) / 0.23;
+          rad = 0.45 * Math.sqrt(Math.max(0.01, 1.0 - t * t));
+          ny = -0.85;
+        }
+        const px = Math.cos(angle) * rad;
+        const py = y;
+        const pz = Math.sin(angle) * rad;
+        const len = Math.hypot(Math.cos(angle), ny, Math.sin(angle)) || 1.0;
+
+        positions[ptr * 3] = px; positions[ptr * 3 + 1] = py; positions[ptr * 3 + 2] = pz;
+        normals[ptr * 3] = Math.cos(angle) / len; normals[ptr * 3 + 1] = ny / len; normals[ptr * 3 + 2] = Math.sin(angle) / len;
+        ptr++;
+      }
+
+      const stemCount = Math.floor(filamentCount * 0.22);
+      const loopCount = filamentCount - stemCount;
+
+      for (let i = 0; i < stemCount; i++) {
+        const v = i / stemCount;
+        const y = -0.35 + v * 0.42;
+        const side = i % 2 === 0 ? -1 : 1;
+        const angle = (i * 2.3999632) % (Math.PI * 2);
+        positions[ptr * 3] = side * 0.12 + Math.cos(angle) * 0.025;
+        positions[ptr * 3 + 1] = y;
+        positions[ptr * 3 + 2] = Math.sin(angle) * 0.025;
+        normals[ptr * 3] = 0.0; normals[ptr * 3 + 1] = 1.0; normals[ptr * 3 + 2] = 0.0;
+        ptr++;
+      }
+
+      for (let i = 0; i < loopCount; i++) {
+        const t = i / loopCount;
+        let px = 0.0, py = 0.0, pz = 0.0;
+        if (t < 0.5) {
+          const u = t * 2.0;
+          px = -0.12 - (0.26 * Math.sin(u * Math.PI));
+          py = 0.07 + 0.78 * Math.sin(u * Math.PI);
+        } else {
+          const u = (t - 0.5) * 2.0;
+          px = 0.12 + (0.26 * Math.sin(u * Math.PI));
+          py = 0.07 + 0.78 * Math.sin(u * Math.PI);
+        }
+        const coilAngle = t * 140.0 * Math.PI;
+        px += Math.cos(coilAngle) * 0.018;
+        pz += Math.sin(coilAngle) * 0.018;
+
+        positions[ptr * 3] = px; positions[ptr * 3 + 1] = py; positions[ptr * 3 + 2] = pz;
+        normals[ptr * 3] = Math.cos(coilAngle); normals[ptr * 3 + 1] = 0.2; normals[ptr * 3 + 2] = Math.sin(coilAngle);
+        ptr++;
+      }
+
+      const tilt = -28.0 * (Math.PI / 180.0);
+      const cosT = Math.cos(tilt), sinT = Math.sin(tilt);
+      for (let i = 0; i < count; i++) {
+        const idx = i * 3;
+        const ox = positions[idx], oy = positions[idx + 1];
+        positions[idx] = (ox * cosT - oy * sinT) - 1.35;
+        positions[idx + 1] = (ox * sinT + oy * cosT) + 0.10;
+
+        const onx = normals[idx], ony = normals[idx + 1];
+        normals[idx] = onx * cosT - ony * sinT;
+        normals[idx + 1] = onx * sinT + ony * cosT;
+      }
+
+      return { positions, normals };
+    }
+
+    // 4. Globe Geometry Generator
+    function generateGlobe(count) {
+      const positions = new Float32Array(count * 3);
+      const normals = new Float32Array(count * 3);
+      const baseR = 1.16; // Perfectly proportioned diameter ~2.32 units matching Brain and Bulb
+      const goldenAngle = Math.PI * (3.0 - Math.sqrt(5.0));
+
+      function isLand(lat, lon) {
+        if (lat >= 60 && lat <= 83 && lon >= -55 && lon <= -18) return true;
+        if (lat >= 15 && lat <= 72 && lon >= -168 && lon <= -55) return true;
+        if (lat >= -55 && lat <= 12 && lon >= -82 && lon <= -34) return true;
+        if (lat >= -35 && lat <= 37 && lon >= -18 && lon <= 52) return true;
+        if (lat >= 36 && lat <= 71 && lon >= -10 && lon <= 45) return true;
+        if (lat >= 8 && lat <= 78 && lon >= 45 && lon <= 180) return true;
+        if (lat >= -44 && lat <= -11 && lon >= 113 && lon <= 154) return true;
+        if (lat <= -68) return true;
+        return false;
+      }
+
+      const landCount = 24000;
+      const ringCount = 2400;
+      let ptr = 0;
+
+      // 1. Continental Landmasses (Dense, crisp clustering on 7 continents)
+      let candidateIdx = 0;
+      while (ptr < landCount) {
+        candidateIdx++;
+        const yNorm = 1.0 - (candidateIdx / (landCount * 3.6)) * 2.0;
+        const clampedY = Math.max(-1.0, Math.min(1.0, ((yNorm % 2.0) + 2.0) % 2.0 - 1.0));
+        const latRad = Math.asin(clampedY);
+        const latDeg = latRad * (180.0 / Math.PI);
+        const lonRad = (candidateIdx * goldenAngle) % (Math.PI * 2.0);
+        const lonDeg = ((lonRad * (180.0 / Math.PI) + 180.0) % 360.0) - 180.0;
+
+        if (isLand(latDeg, lonDeg)) {
+          const r = baseR + 0.025;
+          const cosLat = Math.cos(latRad), sinLat = Math.sin(latRad);
+          const cosLon = Math.cos(lonRad), sinLon = Math.sin(lonRad);
+
+          const px = r * cosLat * cosLon;
+          const py = r * sinLat;
+          const pz = r * cosLat * sinLon;
+          const len = Math.hypot(px, py, pz) || 1.0;
+
+          positions[ptr * 3] = px; positions[ptr * 3 + 1] = py; positions[ptr * 3 + 2] = pz;
+          normals[ptr * 3] = px / len; normals[ptr * 3 + 1] = py / len; normals[ptr * 3 + 2] = pz / len;
+          ptr++;
+        }
+      }
+
+      // 2. Coordinate Rings (Thinner, elegant orbital lines)
+      const rRing = baseR + 0.032;
+      const parallels = [
+        { lat: 0.0, count: 280 },
+        { lat: 23.5, count: 220 },
+        { lat: -23.5, count: 220 },
+        { lat: 66.5, count: 160 },
+        { lat: -66.5, count: 160 },
+        { lat: 45.0, count: 180 },
+        { lat: -45.0, count: 180 }
+      ];
+
+      parallels.forEach(ring => {
+        const latRad = ring.lat * (Math.PI / 180.0);
+        const cosLat = Math.cos(latRad), sinLat = Math.sin(latRad);
+        for (let i = 0; i < ring.count && ptr < (landCount + ringCount - 900); i++) {
+          const lonRad = (i / ring.count) * Math.PI * 2.0;
+          const px = rRing * cosLat * Math.cos(lonRad);
+          const py = rRing * sinLat;
+          const pz = rRing * cosLat * Math.sin(lonRad);
+          const len = Math.hypot(px, py, pz) || 1.0;
+
+          positions[ptr * 3] = px; positions[ptr * 3 + 1] = py; positions[ptr * 3 + 2] = pz;
+          normals[ptr * 3] = px / len; normals[ptr * 3 + 1] = py / len; normals[ptr * 3 + 2] = pz / len;
+          ptr++;
+        }
+      });
+
+      // 12 Meridians
+      for (let m = 0; m < 12; m++) {
+        const lonDeg = m * 30.0;
+        const lonRad = lonDeg * (Math.PI / 180.0);
+        const cosLon = Math.cos(lonRad), sinLon = Math.sin(lonRad);
+        for (let i = 0; i < 70 && ptr < (landCount + ringCount); i++) {
+          const latDeg = -78.0 + (i / 69.0) * 156.0;
+          const latRad = latDeg * (Math.PI / 180.0);
+          const cosLat = Math.cos(latRad), sinLat = Math.sin(latRad);
+
+          const px = rRing * cosLat * cosLon;
+          const py = rRing * sinLat;
+          const pz = rRing * cosLat * sinLon;
+          const len = Math.hypot(px, py, pz) || 1.0;
+
+          positions[ptr * 3] = px; positions[ptr * 3 + 1] = py; positions[ptr * 3 + 2] = pz;
+          normals[ptr * 3] = px / len; normals[ptr * 3 + 1] = py / len; normals[ptr * 3 + 2] = pz / len;
+          ptr++;
+        }
+      }
+
+      while (ptr < (landCount + ringCount)) {
+        const i = ptr - landCount;
+        const angle = (i / ringCount) * Math.PI * 2.0;
+        positions[ptr * 3] = rRing * Math.cos(angle);
+        positions[ptr * 3 + 1] = 0.0;
+        positions[ptr * 3 + 2] = rRing * Math.sin(angle);
+        normals[ptr * 3] = Math.cos(angle);
+        normals[ptr * 3 + 1] = 0.0;
+        normals[ptr * 3 + 2] = Math.sin(angle);
+        ptr++;
+      }
+
+      // 3. Ocean Baseline
+      let oceanIdx = 0;
+      while (ptr < count) {
+        oceanIdx++;
+        const yNorm = 1.0 - (oceanIdx / ((count - landCount - ringCount) * 1.5)) * 2.0;
+        const clampedY = Math.max(-1.0, Math.min(1.0, ((yNorm % 2.0) + 2.0) % 2.0 - 1.0));
+        const latRad = Math.asin(clampedY);
+        const latDeg = latRad * (180.0 / Math.PI);
+        const lonRad = (oceanIdx * goldenAngle) % (Math.PI * 2.0);
+        const lonDeg = ((lonRad * (180.0 / Math.PI) + 180.0) % 360.0) - 180.0;
+
+        if (!isLand(latDeg, lonDeg)) {
+          const r = baseR - 0.015;
+          const cosLat = Math.cos(latRad), sinLat = Math.sin(latRad);
+          const cosLon = Math.cos(lonRad), sinLon = Math.sin(lonRad);
+
+          const px = r * cosLat * cosLon;
+          const py = r * sinLat;
+          const pz = r * cosLat * sinLon;
+          const len = Math.hypot(px, py, pz) || 1.0;
+
+          positions[ptr * 3] = px; positions[ptr * 3 + 1] = py; positions[ptr * 3 + 2] = pz;
+          normals[ptr * 3] = px / len; normals[ptr * 3 + 1] = py / len; normals[ptr * 3 + 2] = pz / len;
+          ptr++;
+        }
+      }
+
+      return { positions, normals };
+    }
+
+    // --- Vertex and Fragment GLSL Shaders ---
+    const vertShader = `
+      attribute vec3 aPosChaos;
+      attribute vec3 aPosBulb;
+      attribute vec3 aPosGlobe;
+      attribute vec3 aNormBrain;
+      attribute vec3 aNormBulb;
+      attribute vec3 aNormGlobe;
+      attribute vec3 aSeed;
+      attribute vec3 aColor;
+
+      uniform float uProgress;
+      uniform float uTime;
+      uniform float uPointSize;
+      uniform vec3 uMouseWorld;
+      uniform float uHoverIntensity;
+      uniform vec2 uRepelCenter1;
+      uniform float uRepelRadius1;
+      uniform vec2 uRepelCenter2;
+      uniform float uRepelRadius2;
+
+      varying vec3 vNormal;
+      varying vec3 vViewPosition;
+      varying vec3 vSeed;
+      varying vec3 vColor;
+      varying float vHoverFactor;
+      varying float vProgress;
+
+      vec3 mod289(vec3 x) { return x - floor(x * (1.0 / 289.0)) * 289.0; }
+      vec4 mod289(vec4 x) { return x - floor(x * (1.0 / 289.0)) * 289.0; }
+      vec4 permute(vec4 x) { return mod289(((x * 34.0) + 1.0) * x); }
+      vec4 taylorInvSqrt(vec4 r) { return 1.79284291400159 - 0.85373472095314 * r; }
+
+      float snoise(vec3 v) {
+        const vec2 C = vec2(1.0 / 6.0, 1.0 / 3.0);
+        const vec4 D = vec4(0.0, 0.5, 1.0, 2.0);
+        vec3 i  = floor(v + dot(v, C.yyy));
+        vec3 x0 = v - i + dot(i, C.xxx);
+        vec3 g = step(x0.yzx, x0.xyz);
+        vec3 l = 1.0 - g;
+        vec3 i1 = min(g.xyz, l.zxy);
+        vec3 i2 = max(g.xyz, l.zxy);
+        vec3 x1 = x0 - i1 + C.xxx;
+        vec3 x2 = x0 - i2 + C.yyy;
+        vec3 x3 = x0 - D.yyy;
+        i = mod289(i);
+        vec4 p = permute(permute(permute(
+                   i.z + vec4(0.0, i1.z, i2.z, 1.0))
+                 + i.y + vec4(0.0, i1.y, i2.y, 1.0))
+                 + i.x + vec4(0.0, i1.x, i2.x, 1.0));
+        float n_ = 0.142857142857;
+        vec3 ns = n_ * D.wyz - D.xzx;
+        vec4 j = p - 49.0 * floor(p * ns.z * ns.z);
+        vec4 x_ = floor(j * ns.z);
+        vec4 y_ = floor(j - 7.0 * x_);
+        vec4 x = x_ * ns.x + ns.yyyy;
+        vec4 y = y_ * ns.x + ns.yyyy;
+        vec4 h = 1.0 - abs(x) - abs(y);
+        vec4 b0 = vec4(x.xy, y.xy);
+        vec4 b1 = vec4(x.zw, y.zw);
+        vec4 s0 = floor(b0) * 2.0 + 1.0;
+        vec4 s1 = floor(b1) * 2.0 + 1.0;
+        vec4 sh = -step(h, vec4(0.0));
+        vec4 a0 = b0.xzyw + s0.xzyw * sh.xxyy;
+        vec4 a1 = b1.xzyw + s1.xzyw * sh.zzww;
+        vec3 p0 = vec3(a0.xy, h.x);
+        vec3 p1 = vec3(a0.zw, h.y);
+        vec3 p2 = vec3(a1.xy, h.z);
+        vec3 p3 = vec3(a1.zw, h.w);
+        vec4 norm = taylorInvSqrt(vec4(dot(p0, p0), dot(p1, p1), dot(p2, p2), dot(p3, p3)));
+        p0 *= norm.x; p1 *= norm.y; p2 *= norm.z; p3 *= norm.w;
+        vec4 m = max(0.6 - vec4(dot(x0, x0), dot(x1, x1), dot(x2, x2), dot(x3, x3)), 0.0);
+        m = m * m;
+        return 42.0 * dot(m * m, vec4(dot(p0, x0), dot(p1, x1), dot(p2, x2), dot(p3, x3)));
+      }
+
+      // 3D Divergence-Free Curl Noise (Incompressible 3-field vector potential)
+      vec3 curlNoise(vec3 p) {
+        const float e = 0.08;
+        const float inv2e = 1.0 / (2.0 * e);
+
+        float p1_y_pos = snoise(p + vec3(0.0, e, 0.0));
+        float p1_y_neg = snoise(p - vec3(0.0, e, 0.0));
+        float p1_z_pos = snoise(p + vec3(0.0, 0.0, e));
+        float p1_z_neg = snoise(p - vec3(0.0, 0.0, e));
+
+        vec3 p2 = p + vec3(31.41, 15.92, 65.35);
+        float p2_x_pos = snoise(p2 + vec3(e, 0.0, 0.0));
+        float p2_x_neg = snoise(p2 - vec3(e, 0.0, 0.0));
+        float p2_z_pos = snoise(p2 + vec3(0.0, 0.0, e));
+        float p2_z_neg = snoise(p2 - vec3(0.0, 0.0, e));
+
+        vec3 p3 = p + vec3(89.79, 32.38, 46.26);
+        float p3_x_pos = snoise(p3 + vec3(e, 0.0, 0.0));
+        float p3_x_neg = snoise(p3 - vec3(e, 0.0, 0.0));
+        float p3_y_pos = snoise(p3 + vec3(0.0, e, 0.0));
+        float p3_y_neg = snoise(p3 - vec3(0.0, e, 0.0));
+
+        float vx = ((p3_y_pos - p3_y_neg) - (p2_z_pos - p2_z_neg)) * inv2e;
+        float vy = ((p1_z_pos - p1_z_neg) - (p3_x_pos - p3_x_neg)) * inv2e;
+        float vz = ((p2_x_pos - p2_x_neg) - (p1_y_pos - p1_y_neg)) * inv2e;
+
+        return vec3(vx, vy, vz);
+      }
+
+      vec3 rotateY(vec3 p, float angle) {
+        float c = cos(angle);
+        float s = sin(angle);
+        return vec3(p.x * c + p.z * s, p.y, -p.x * s + p.z * c);
+      }
+
+      void main() {
+        vSeed = aSeed;
+        vColor = aColor;
+        vProgress = uProgress;
+
+        float breath = 1.0 + 0.018 * sin(uTime * 1.8 + aSeed.z * 6.28);
+        vec3 pBrain = position * breath;
+        vec3 nBrain = aNormBrain;
+
+        vec3 pStage0 = pBrain + vec3(1.25, 0.0, 0.0);
+        vec3 pBrainRotated = rotateY(pBrain, 1.35);
+        vec3 nBrainRotated = rotateY(nBrain, 1.35);
+        vec3 pStage1 = pBrainRotated + vec3(-1.15, 0.0, 0.0);
+
+        vec3 pStage2 = aPosChaos;
+        vec3 nStage2 = normalize(aPosChaos);
+
+        vec3 pStage3 = aPosBulb;
+        vec3 nStage3 = aNormBulb;
+
+        // Stage 4: Planetary Globe (Earth's axial spin around tilted polar axis)
+        float globeSpin = uTime * 0.25;
+        vec3 pGlobeSpun = rotateY(aPosGlobe, globeSpin);
+        vec3 nGlobeSpun = rotateY(aNormGlobe, globeSpin);
+
+        const float axialTilt = 23.5 * (3.14159265359 / 180.0);
+        float cosTilt = cos(axialTilt);
+        float sinTilt = sin(axialTilt);
+        vec3 pStage4 = vec3(
+          pGlobeSpun.x * cosTilt - pGlobeSpun.y * sinTilt + 1.35,
+          pGlobeSpun.x * sinTilt + pGlobeSpun.y * cosTilt,
+          pGlobeSpun.z
+        );
+        vec3 nStage4 = vec3(
+          nGlobeSpun.x * cosTilt - nGlobeSpun.y * sinTilt,
+          nGlobeSpun.x * sinTilt + nGlobeSpun.y * cosTilt,
+          nGlobeSpun.z
+        );
+
+        vec3 currentPos = pStage0;
+        vec3 currentNorm = nBrain;
+        float p = clamp(uProgress, 0.0, 4.0);
+
+        if (p < 1.0) {
+          float t = smoothstep(0.0, 1.0, p);
+          currentPos = mix(pStage0, pStage1, t);
+          currentNorm = normalize(mix(nBrain, nBrainRotated, t));
+        } else if (p < 2.0) {
+          float t = smoothstep(0.0, 1.0, p - 1.0);
+          float turb = sin(t * 3.141592);
+          vec3 curl = curlNoise(mix(pStage1, pStage2, t) * 0.45 + vec3(uTime * 0.15));
+          currentPos = mix(pStage1, pStage2, t) + curl * (turb * 1.6);
+          currentNorm = normalize(mix(nBrainRotated, nStage2, t));
+        } else if (p < 3.0) {
+          float t = smoothstep(0.0, 1.0, p - 2.0);
+          float turb = sin(t * 3.141592);
+          vec3 curl = curlNoise(mix(pStage2, pStage3, t) * 0.45 + vec3(uTime * 0.15));
+          currentPos = mix(pStage2, pStage3, t) + curl * (turb * 1.4);
+          currentNorm = normalize(mix(nStage2, nStage3, t));
+        } else {
+          float t = smoothstep(0.0, 1.0, p - 3.0);
+          float turb = sin(t * 3.141592);
+          vec3 curl = curlNoise(mix(pStage3, pStage4, t) * 0.45 + vec3(uTime * 0.15));
+          currentPos = mix(pStage3, pStage4, t) + curl * (turb * 1.3);
+          currentNorm = normalize(mix(nStage3, nStage4, t));
+        }
+
+        float distToMouse = length(currentPos - uMouseWorld);
+        float hoverFactor = smoothstep(0.65, 0.0, distToMouse) * uHoverIntensity;
+        currentPos += currentNorm * (hoverFactor * 0.22);
+        vHoverFactor = hoverFactor;
+
+        vec4 mvPosition = modelViewMatrix * vec4(currentPos, 1.0);
+
+        if (uRepelRadius1 > 0.0) {
+          vec2 d1 = mvPosition.xy - uRepelCenter1;
+          float len1 = length(d1);
+          if (len1 < uRepelRadius1) {
+            vec2 dir = len1 > 0.001 ? d1 / len1 : vec2(0.0, 1.0);
+            float f = smoothstep(uRepelRadius1, 0.0, len1);
+            mvPosition.xy += dir * (f * 0.82);
+            mvPosition.z -= f * 0.45;
+          }
+        }
+        if (uRepelRadius2 > 0.0) {
+          vec2 d2 = mvPosition.xy - uRepelCenter2;
+          float len2 = length(d2);
+          if (len2 < uRepelRadius2) {
+            vec2 dir = len2 > 0.001 ? d2 / len2 : vec2(0.0, 1.0);
+            float f = smoothstep(uRepelRadius2, 0.0, len2);
+            mvPosition.xy += dir * (f * 0.82);
+            mvPosition.z -= f * 0.45;
+          }
+        }
+
+        vNormal = normalize(normalMatrix * currentNorm);
+        vViewPosition = mvPosition.xyz;
+        gl_Position = projectionMatrix * mvPosition;
+
+        float pointScale = (1.0 + hoverFactor * 0.45) * aSeed.z;
+        // Perspective micro-particle point size (uPointSize ~ 3.0px)
+        gl_PointSize = uPointSize * pointScale * (4.6 / -mvPosition.z);
+        gl_PointSize = clamp(gl_PointSize, 1.5, 9.0);
+      }
+    `;
+
+    const fragShader = `
+      uniform float uTime;
+      uniform float uThemeMode;
+      uniform float uProgress;
+
+      varying vec3 vNormal;
+      varying vec3 vViewPosition;
+      varying vec3 vSeed;
+      varying vec3 vColor;
+      varying float vHoverFactor;
+      varying float vProgress;
+
+      float sdEquilateralTriangle(vec2 p, float r) {
+        const float k = 1.7320508;
+        p.x = abs(p.x) - r;
+        p.y = p.y + r / k;
+        if (p.x + k * p.y > 0.0) p = vec2(p.x - k * p.y, -k * p.x - p.y) / 2.0;
+        p.x -= clamp(p.x, -2.0 * r, 0.0);
+        return -length(p) * sign(p.y);
+      }
+
+      float sdStar(vec2 p, float r) {
+        vec2 q = abs(p);
+        return (q.x + q.y) - r;
+      }
+
+      void main() {
+        vec2 p = gl_PointCoord - vec2(0.5);
+        float primType = vSeed.x;
+        float alpha = 0.0;
+
+        // Clean SDF Micro-Primitives tuned for 3px - 8px points
+        if (primType < 0.60) {
+          // 60% Crisp hollow wireframe micro-triangles
+          float d = sdEquilateralTriangle(p, 0.38);
+          float border = abs(d) - 0.08;
+          float stroke = 1.0 - smoothstep(0.0, 0.05, border);
+          float subtleFill = (1.0 - smoothstep(0.0, 0.04, d)) * 0.20;
+          alpha = max(stroke * 0.75, subtleFill);
+        } else if (primType < 0.85) {
+          // 25% Semi-transparent solid micro-triangles
+          float d = sdEquilateralTriangle(p, 0.36);
+          alpha = (1.0 - smoothstep(0.0, 0.05, d)) * 0.50;
+        } else {
+          // 15% Specular star glints & radiant micro-dots
+          float dStar = sdStar(p, 0.32);
+          float starMask = 1.0 - smoothstep(0.0, 0.06, dStar);
+          float dotCore = 1.0 - smoothstep(0.0, 0.20, length(p));
+          alpha = max(starMask * 0.85, dotCore * 0.95);
+        }
+
+        if (alpha < 0.02) discard;
+
+        vec3 viewDir = normalize(-vViewPosition);
+        vec3 norm = normalize(vNormal);
+        float fresnel = pow(1.0 - clamp(dot(norm, viewDir), 0.0, 1.0), 2.2);
+
+        float filamentGlow = 0.0;
+        if (vProgress > 2.2 && vProgress < 3.8) {
+          float b = clamp(1.0 - abs(vProgress - 3.0), 0.0, 1.0);
+          filamentGlow = b * vSeed.y * 0.90;
+        }
+
+        // --- Non-Blowing Additive Blending (Edition A: Warm Natural Earth & Espresso) ---
+        // Scale base color proportionally with Fresnel & Hover — NO clipping to solid white!
+        vec3 colorA = vColor * 0.68;
+        colorA += vColor * (0.35 * fresnel);
+        colorA += vColor * (0.45 * vHoverFactor);
+
+        if (filamentGlow > 0.0) {
+          vec3 tungsten = vec3(0.98, 0.62, 0.20);
+          colorA = mix(colorA, tungsten, filamentGlow * 0.75) + tungsten * (filamentGlow * 0.40);
+        }
+
+        // --- Edition B: Inverted Architectural Monochrome ---
+        vec3 colorB = vec3(0.09, 0.10, 0.11);
+        vec3 slate = vec3(0.24, 0.26, 0.28);
+        colorB = mix(colorB, slate, fresnel * 0.60 + vSeed.z * 0.15);
+        if (vHoverFactor > 0.05) colorB = mix(colorB, vec3(0.40, 0.44, 0.48), vHoverFactor * 0.5);
+
+        vec3 finalColor = mix(colorA, colorB, uThemeMode);
+        float finalAlpha = mix(alpha * 0.70, alpha * 0.88, uThemeMode);
+        gl_FragColor = vec4(finalColor, finalAlpha);
+      }
+    `;
+
+    // --- Main Three.js Runtime ---
+    const canvas = document.getElementById('webgl-canvas');
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 100);
+    camera.position.set(0, 0, window.innerWidth <= 640 ? 5.6 : 4.6);
+
+    const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true, powerPreference: 'high-performance' });
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+
+    // Create Geometry
+    const geo = new THREE.BufferGeometry();
+    const brain = generateBrain(PARTICLE_COUNT);
+    const chaos = generateChaos(PARTICLE_COUNT);
+    const bulb = generateBulb(PARTICLE_COUNT);
+    const globe = generateGlobe(PARTICLE_COUNT);
+
+    geo.setAttribute('position', new THREE.BufferAttribute(brain.positions, 3));
+    geo.setAttribute('aPosChaos', new THREE.BufferAttribute(chaos.positions, 3));
+    geo.setAttribute('aPosBulb', new THREE.BufferAttribute(bulb.positions, 3));
+    geo.setAttribute('aPosGlobe', new THREE.BufferAttribute(globe.positions, 3));
+
+    geo.setAttribute('aNormBrain', new THREE.BufferAttribute(brain.normals, 3));
+    geo.setAttribute('aNormBulb', new THREE.BufferAttribute(bulb.normals, 3));
+    geo.setAttribute('aNormGlobe', new THREE.BufferAttribute(globe.normals, 3));
+
+    const seeds = new Float32Array(PARTICLE_COUNT * 3);
+    const colors = new Float32Array(PARTICLE_COUNT * 3);
+    const palette = [
+      new THREE.Color('#a88f6c'), // Warm sand base
+      new THREE.Color('#3d633a'), // Deep moss base
+      new THREE.Color('#6b9666'), // Soft sage base
+      new THREE.Color('#db8f38'), // Radiant warm amber highlight
+      new THREE.Color('#ebdcb8')  // Soft champagne highlight
+    ];
+
+    for (let i = 0; i < PARTICLE_COUNT; i++) {
+      seeds[i * 3] = Math.random();
+      seeds[i * 3 + 1] = (i >= 28000 && i < 36000) ? 1.0 : 0.0;
+      seeds[i * 3 + 2] = 0.8 + Math.random() * 0.4;
+
+      let col;
+      if (i < 22000) {
+        const r = Math.random();
+        if (r < 0.38) col = palette[0];
+        else if (r < 0.70) col = palette[1];
+        else col = palette[2];
+      } else if (i < 28000) {
+        const r = Math.random();
+        if (r < 0.55) col = palette[3];
+        else col = palette[4];
+      } else {
+        const r = Math.random();
+        if (r < 0.65) col = palette[3];
+        else col = palette[4];
+      }
+
+      colors[i * 3] = col.r;
+      colors[i * 3 + 1] = col.g;
+      colors[i * 3 + 2] = col.b;
+    }
+    geo.setAttribute('aSeed', new THREE.BufferAttribute(seeds, 3));
+    geo.setAttribute('aColor', new THREE.BufferAttribute(colors, 3));
+
+    const material = new THREE.ShaderMaterial({
+      vertexShader: vertShader,
+      fragmentShader: fragShader,
+      uniforms: {
+        uProgress: { value: 0.0 },
+        uTime: { value: 0.0 },
+        uPointSize: { value: window.devicePixelRatio > 1 ? 2.8 : 3.4 },
+        uMouseWorld: { value: new THREE.Vector3(999, 999, 999) },
+        uHoverIntensity: { value: 0.0 },
+        uThemeMode: { value: 0.0 },
+        uRepelCenter1: { value: new THREE.Vector2(0, 0) },
+        uRepelRadius1: { value: 0.0 },
+        uRepelCenter2: { value: new THREE.Vector2(0, 0) },
+        uRepelRadius2: { value: 0.0 }
+      },
+      transparent: true,
+      depthWrite: false,
+      blending: THREE.AdditiveBlending
+    });
+
+    const particles = new THREE.Points(geo, material);
+    scene.add(particles);
+
+    // Scene Lighting for Crystalline Polyhedra Facet Specular Glints
+    const ambientLight = new THREE.AmbientLight(0xffffff, 1.2);
+    scene.add(ambientLight);
+
+    const dirLight1 = new THREE.DirectionalLight(0xffffff, 2.5);
+    dirLight1.position.set(5, 8, 6);
+    scene.add(dirLight1);
+
+    const dirLight2 = new THREE.DirectionalLight(0x88ccff, 1.0);
+    dirLight2.position.set(-6, -4, -4);
+    scene.add(dirLight2);
+
+    // Pinpoint Vertex Dot Glow Texture
+    function createGlowDotTexture() {
+      const c = document.createElement('canvas');
+      c.width = 64;
+      c.height = 64;
+      const ctx = c.getContext('2d');
+      const grad = ctx.createRadialGradient(32, 32, 0, 32, 32, 32);
+      grad.addColorStop(0, 'rgba(255, 255, 255, 1.0)');
+      grad.addColorStop(0.25, 'rgba(240, 248, 255, 0.85)');
+      grad.addColorStop(0.55, 'rgba(200, 225, 255, 0.35)');
+      grad.addColorStop(1, 'rgba(255, 255, 255, 0.0)');
+      ctx.fillStyle = grad;
+      ctx.fillRect(0, 0, 64, 64);
+      return new THREE.CanvasTexture(c);
+    }
+
+    function extractUniqueVertices(geometry) {
+      const pos = geometry.attributes.position;
+      const unique = [];
+      const seen = new Set();
+      for (let i = 0; i < pos.count; i++) {
+        const x = Number(pos.getX(i).toFixed(3));
+        const y = Number(pos.getY(i).toFixed(3));
+        const z = Number(pos.getZ(i).toFixed(3));
+        const key = `${x}_${y}_${z}`;
+        if (!seen.has(key)) {
+          seen.add(key);
+          unique.push(x, y, z);
+        }
+      }
+      const dotGeo = new THREE.BufferGeometry();
+      dotGeo.setAttribute('position', new THREE.BufferAttribute(new Float32Array(unique), 3));
+      return dotGeo;
+    }
+
+    // Crystalline Polyhedra (Stage 2: Workplace Entropy)
+    const polyGroup = new THREE.Group();
+    const glowDotTex = createGlowDotTexture();
+
+    const tetraGeo = new THREE.TetrahedronGeometry(1.0, 0);
+    const octaGeo = new THREE.OctahedronGeometry(1.0, 0);
+
+    const tetraEdges = new THREE.EdgesGeometry(tetraGeo);
+    const octaEdges = new THREE.EdgesGeometry(octaGeo);
+
+    const tetraDots = extractUniqueVertices(tetraGeo);
+    const octaDots = extractUniqueVertices(octaGeo);
+
+    // Curated spatial layout framing the central obsidian glass card (X in [-1.8, 1.8], Y in [-1.6, 1.6])
+    // exactly matching reference screenshot media_1788741146970.png:
+    const polyConfigs = [
+      // Left Flank (8 crystalline prisms)
+      { type: 'tetra', x: -3.7, y: 1.85, z: 0.35, scale: 0.72, rx: 0.4, ry: 0.8 },
+      { type: 'octa',  x: -3.3, y: 0.35, z: 0.20, scale: 0.54, rx: 0.2, ry: 0.5 },
+      { type: 'tetra', x: -4.4, y: -0.65, z: -0.35, scale: 0.46, rx: 0.6, ry: 0.3 },
+      { type: 'octa',  x: -2.9, y: -1.95, z: 0.38, scale: 0.50, rx: 0.5, ry: 0.7 },
+      { type: 'octa',  x: -2.4, y: 2.35, z: -0.80, scale: 0.40, rx: 0.3, ry: 0.9 },
+      { type: 'tetra', x: -4.6, y: 1.20, z: -1.10, scale: 0.42, rx: 0.7, ry: 0.4 },
+      { type: 'tetra', x: -3.9, y: -2.30, z: -0.90, scale: 0.36, rx: 0.4, ry: 0.6 },
+      { type: 'octa',  x: -2.6, y: -1.05, z: -1.60, scale: 0.34, rx: 0.5, ry: 0.2 },
+
+      // Right Flank (8 crystalline prisms)
+      { type: 'tetra', x: 3.55, y: 0.32, z: 0.48, scale: 0.78, rx: 0.5, ry: 0.7 }, // Prominent inward-pointing prism
+      { type: 'octa',  x: 3.85, y: 1.90, z: -0.15, scale: 0.52, rx: 0.3, ry: 0.6 },
+      { type: 'octa',  x: 3.25, y: -1.30, z: 0.18, scale: 0.56, rx: 0.4, ry: 0.5 },
+      { type: 'tetra', x: 4.25, y: -2.05, z: -0.40, scale: 0.44, rx: 0.6, ry: 0.3 },
+      { type: 'tetra', x: 2.60, y: 2.25, z: -0.85, scale: 0.38, rx: 0.4, ry: 0.8 },
+      { type: 'octa',  x: 4.55, y: 1.05, z: -1.15, scale: 0.40, rx: 0.2, ry: 0.7 },
+      { type: 'tetra', x: 3.95, y: -0.75, z: -1.45, scale: 0.36, rx: 0.5, ry: 0.4 },
+      { type: 'octa',  x: 2.45, y: -2.25, z: -1.55, scale: 0.32, rx: 0.3, ry: 0.5 },
+
+      // Deep Ambient Prisms (Top & Background Depth)
+      { type: 'tetra', x: -0.85, y: 2.65, z: -2.40, scale: 0.34, rx: 0.3, ry: 0.5 },
+      { type: 'octa',  x: 1.15, y: 2.55, z: -2.60, scale: 0.32, rx: 0.4, ry: 0.6 }
+    ];
+
+    polyConfigs.forEach((cfg, i) => {
+      const pGroup = new THREE.Group();
+      const isTetra = cfg.type === 'tetra';
+      const bGeo = isTetra ? tetraGeo : octaGeo;
+      const bEdges = isTetra ? tetraEdges : octaEdges;
+      const bDots = isTetra ? tetraDots : octaDots;
+
+      // 1. Semi-transparent tinted crystalline faces with flat shading
+      const faceMat = new THREE.MeshStandardMaterial({
+        color: 0xdae6f2,
+        roughness: 0.16,
+        metalness: 0.35,
+        flatShading: true,
+        transparent: true,
+        opacity: 0.0,
+        side: THREE.DoubleSide,
+        depthWrite: false
+      });
+      pGroup.add(new THREE.Mesh(bGeo, faceMat));
+
+      // 2. Crisp wireframe edge lines
+      const lineMat = new THREE.LineBasicMaterial({
+        color: 0xffffff,
+        transparent: true,
+        opacity: 0.0,
+        depthWrite: false,
+        blending: THREE.AdditiveBlending
+      });
+      pGroup.add(new THREE.LineSegments(bEdges, lineMat));
+
+      // 3. Glowing pinpoint vertex dots scaled proportionally
+      const dotMat = new THREE.PointsMaterial({
+        color: 0xffffff,
+        size: 0.10 * cfg.scale,
+        map: glowDotTex,
+        transparent: true,
+        opacity: 0.0,
+        blending: THREE.AdditiveBlending,
+        depthWrite: false
+      });
+      pGroup.add(new THREE.Points(bDots, dotMat));
+
+      pGroup.position.set(cfg.x, cfg.y, cfg.z);
+      pGroup.scale.set(cfg.scale, cfg.scale, cfg.scale);
+      pGroup.rotation.set(cfg.rx, cfg.ry, 0);
+
+      pGroup.userData = {
+        faceMat,
+        lineMat,
+        dotMat,
+        baseFaceOpacity: 0.15 + (i % 4) * 0.02,
+        baseLineOpacity: 0.48 + (i % 3) * 0.05,
+        baseDotOpacity: 0.92 + (i % 3) * 0.03,
+        rotSpeedX: ((i % 5) - 2) * 0.005 + 0.003,
+        rotSpeedY: (((i + 2) % 5) - 2) * 0.005 + 0.004,
+        rotSpeedZ: (((i + 4) % 5) - 2) * 0.004 + 0.002,
+        initialZ: cfg.z,
+        floatFreq: 0.35 + (i % 4) * 0.12,
+        floatPhase: (i * 1.37) % (Math.PI * 2)
+      };
+
+      polyGroup.add(pGroup);
+    });
+    scene.add(polyGroup);
+
+    // Register GSAP ScrollTrigger plugin
+    gsap.registerPlugin(ScrollTrigger);
+
+    // Lenis Kinetic Smooth Scroll
+    const lenis = new Lenis({
+      duration: 1.35,
+      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      smoothWheel: true
+    });
+    lenis.on('scroll', ScrollTrigger.update);
+    gsap.ticker.add((time) => lenis.raf(time * 1000));
+    gsap.ticker.lagSmoothing(0);
+
+    // GSAP ScrollTrigger Stage Tracking
+    const trackerItems = document.querySelectorAll('.tracker-item');
+    const stageBadgeLabel = document.getElementById('stage-badge-label');
+    const navLinks = document.querySelectorAll('.nav-link');
+    const stageLabels = [
+      "01 // ATLAS COGNITION",
+      "01 // LATERAL PROFILE",
+      "02 // WORKPLACE ENTROPY",
+      "03 // CLARITY IGNITION",
+      "04 // PLANETARY NETWORK"
+    ];
+
+    ScrollTrigger.create({
+      trigger: '.scroll-container',
+      start: 'top top',
+      end: 'bottom bottom',
+      scrub: 0.65,
+      onUpdate: (self) => {
+        const p = self.progress * 4.0;
+        material.uniforms.uProgress.value = p;
+        const sIdx = Math.min(4, Math.max(0, Math.round(p)));
+
+        if (stageBadgeLabel) {
+          stageBadgeLabel.textContent = stageLabels[sIdx];
+        }
+
+        const activeNavStage = sIdx <= 1 ? 0 : sIdx;
+        navLinks.forEach((link) => {
+          const stageVal = parseInt(link.getAttribute('data-stage'), 10);
+          link.classList.toggle('active', stageVal === activeNavStage);
+        });
+
+        trackerItems.forEach((it, idx) => {
+          it.classList.toggle('active', idx === sIdx);
+        });
+
+        updateRepel();
+      }
+    });
+
+    function smoothScrollTo(targetSelector) {
+      const el = document.querySelector(targetSelector);
+      if (el) lenis.scrollTo(el, { duration: 1.4 });
+    }
+
+    navLinks.forEach((link) => {
+      link.addEventListener('click', (e) => {
+        e.preventDefault();
+        smoothScrollTo(link.getAttribute('href'));
+      });
+    });
+
+    trackerItems.forEach((it) => {
+      it.addEventListener('click', () => {
+        smoothScrollTo(`#${it.getAttribute('data-target')}`);
+      });
+    });
+
+    document.querySelectorAll('.witness-coherence-btn').forEach((btn) => {
+      btn.addEventListener('click', (e) => {
+        e.preventDefault();
+        smoothScrollTo(btn.getAttribute('href'));
+      });
+    });
+
+    // View-Space Text Repulsion
+    const scrimElements = Array.from(document.querySelectorAll('.frosted-obsidian-card'));
+
+    function updateRepel() {
+      let found = 0;
+      for (let i = 0; i < scrimElements.length; i++) {
+        const scrim = scrimElements[i];
+        const rect = scrim.getBoundingClientRect();
+        if (rect.top < window.innerHeight && rect.bottom > 0) {
+          const cx = rect.left + rect.width * 0.5;
+          const cy = rect.top + rect.height * 0.5;
+          const ndcX = (cx / window.innerWidth) * 2.0 - 1.0;
+          const ndcY = -(cy / window.innerHeight) * 2.0 + 1.0;
+          const vFOV = (camera.fov * Math.PI) / 180.0;
+          const vH = 2.0 * Math.tan(vFOV / 2.0) * camera.position.z;
+          const vW = vH * camera.aspect;
+          const vx = (ndcX * vW) * 0.5;
+          const vy = (ndcY * vH) * 0.5;
+          const r = (Math.max(rect.width, rect.height) * 0.45 / window.innerHeight) * vH * 0.52;
+
+          if (found === 0) {
+            material.uniforms.uRepelCenter1.value.set(vx, vy);
+            material.uniforms.uRepelRadius1.value = r;
+            found++;
+          } else if (found === 1) {
+            material.uniforms.uRepelCenter2.value.set(vx, vy);
+            material.uniforms.uRepelRadius2.value = r;
+            found++;
+            break;
+          }
+        }
+      }
+      if (found === 0) { material.uniforms.uRepelRadius1.value = 0.0; material.uniforms.uRepelRadius2.value = 0.0; }
+      else if (found === 1) { material.uniforms.uRepelRadius2.value = 0.0; }
+    }
+    updateRepel();
+
+    // Mouse Interaction (Surface Hover Physics)
+    const raycaster = new THREE.Raycaster();
+    const mouseNDC = new THREE.Vector2(-999, -999);
+    const targetMouseWorld = new THREE.Vector3(999, 999, 999);
+    let targetHoverIntensity = 0.0;
+    const plane = new THREE.Plane(new THREE.Vector3(0, 0, 1), 0);
+
+    window.addEventListener('pointermove', (e) => {
+      mouseNDC.x = (e.clientX / window.innerWidth) * 2 - 1;
+      mouseNDC.y = -(e.clientY / window.innerHeight) * 2 + 1;
+      raycaster.setFromCamera(mouseNDC, camera);
+      const hit = raycaster.ray.intersectPlane(plane, new THREE.Vector3());
+      if (hit) { targetMouseWorld.copy(hit); targetHoverIntensity = 1.0; }
+    });
+    window.addEventListener('pointerleave', () => { targetHoverIntensity = 0.0; });
+
+    // Web Audio API Synthesizer
+    class AmbientAudioSynth {
+      constructor() {
+        this.ctx = null;
+        this.isPlaying = false;
+        this.gainNode = null;
+        this.oscillators = [];
+        this.filterNode = null;
+        this.lfo = null;
+        this.stopTimer = null;
+      }
+      init() {
+        if (!this.ctx) {
+          const AudioCtx = window.AudioContext || window.webkitAudioContext;
+          this.ctx = new AudioCtx();
+        }
+      }
+      toggle() {
+        this.init();
+        if (this.ctx.state === 'suspended') this.ctx.resume();
+        if (this.isPlaying) { this.stop(); return false; }
+        else { this.start(); return true; }
+      }
+      start() {
+        if (this.stopTimer) {
+          clearTimeout(this.stopTimer);
+          this.stopTimer = null;
+        }
+
+        this.gainNode = this.ctx.createGain();
+        this.gainNode.gain.setValueAtTime(0.0001, this.ctx.currentTime);
+        this.gainNode.gain.exponentialRampToValueAtTime(0.08, this.ctx.currentTime + 1.0);
+
+        this.filterNode = this.ctx.createBiquadFilter();
+        this.filterNode.type = 'lowpass';
+        this.filterNode.frequency.setValueAtTime(400, this.ctx.currentTime);
+        this.filterNode.Q.setValueAtTime(3.0, this.ctx.currentTime);
+
+        const lfo = this.ctx.createOscillator();
+        const lfoGain = this.ctx.createGain();
+        lfo.frequency.setValueAtTime(0.15, this.ctx.currentTime);
+        lfoGain.gain.setValueAtTime(120, this.ctx.currentTime);
+        lfo.connect(lfoGain);
+        lfoGain.connect(this.filterNode.frequency);
+        lfo.start();
+        this.lfo = lfo;
+
+        const freqs = [73.42, 110.0, 146.83, 220.0, 329.63];
+        this.oscillators = freqs.map((f, i) => {
+          const osc = this.ctx.createOscillator();
+          osc.type = i % 2 === 0 ? 'sine' : 'triangle';
+          osc.frequency.setValueAtTime(f, this.ctx.currentTime);
+          osc.detune.setValueAtTime((i - 2) * 5.0, this.ctx.currentTime);
+
+          const oscGain = this.ctx.createGain();
+          oscGain.gain.setValueAtTime(0.18 / freqs.length, this.ctx.currentTime);
+          osc.connect(oscGain);
+          oscGain.connect(this.filterNode);
+          osc.start();
+          return osc;
+        });
+
+        this.filterNode.connect(this.gainNode);
+        this.gainNode.connect(this.ctx.destination);
+        this.isPlaying = true;
+      }
+      stop() {
+        if (!this.gainNode || !this.isPlaying) return;
+        const now = this.ctx.currentTime;
+        this.gainNode.gain.cancelScheduledValues(now);
+        this.gainNode.gain.setValueAtTime(this.gainNode.gain.value, now);
+        this.gainNode.gain.exponentialRampToValueAtTime(0.0001, now + 0.6);
+
+        this.stopTimer = setTimeout(() => {
+          this.oscillators.forEach(osc => { try { osc.stop(); osc.disconnect(); } catch (e) {} });
+          this.oscillators = [];
+          if (this.lfo) { try { this.lfo.stop(); this.lfo.disconnect(); } catch (e) {} this.lfo = null; }
+          this.isPlaying = false;
+          this.stopTimer = null;
+        }, 650);
+      }
+    }
+
+    const audioSynth = new AmbientAudioSynth();
+    const audioBtn = document.getElementById('audio-toggle-btn');
+    if (audioBtn) {
+      audioBtn.addEventListener('click', () => {
+        const isPlaying = audioSynth.toggle();
+        audioBtn.classList.toggle('active', isPlaying);
+        const icon = audioBtn.querySelector('.audio-waves-icon');
+        if (icon) icon.textContent = isPlaying ? 'ılı' : '···';
+      });
+    }
+
+    // --- Dual Aesthetic Edition Switcher (Edition A <-> Edition B) ---
+    let currentTheme = 'A';
+    const themeBtn = document.getElementById('theme-toggle-btn');
+    const themeLabel = document.getElementById('theme-label');
+
+    function setTheme(theme) {
+      currentTheme = theme;
+      const isLight = theme === 'B';
+      document.body.classList.toggle('theme-light', isLight);
+
+      gsap.to(material.uniforms.uThemeMode, {
+        value: isLight ? 1.0 : 0.0,
+        duration: 0.45,
+        ease: 'power2.out'
+      });
+
+      // NormalBlending for ink particles on white, AdditiveBlending for glowing particles on espresso
+      material.blending = isLight ? THREE.NormalBlending : THREE.AdditiveBlending;
+      material.needsUpdate = true;
+
+      if (themeLabel) {
+        themeLabel.textContent = isLight ? 'EDITION B' : 'EDITION A';
+      }
+    }
+
+    if (themeBtn) {
+      themeBtn.addEventListener('click', () => {
+        setTheme(currentTheme === 'A' ? 'B' : 'A');
+      });
+    }
+
+    // Resize
+    window.addEventListener('resize', () => {
+      const w = window.innerWidth, h = window.innerHeight;
+      camera.aspect = w / h;
+      camera.position.z = w <= 640 ? 5.6 : 4.6;
+      camera.updateProjectionMatrix();
+      renderer.setSize(w, h);
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      material.uniforms.uPointSize.value = window.devicePixelRatio > 1 ? 2.8 : 3.4;
+      updateRepel();
+    });
+
+    // 60-144 FPS Hardware-Accelerated Render Loop
+    let startT = performance.now(), lastT = performance.now(), fc = 0;
+    const fpsElem = document.getElementById('fps-val');
+
+    function loop() {
+      requestAnimationFrame(loop);
+      const now = performance.now();
+      const elapsed = (now - startT) * 0.001;
+      const delta = (now - lastT) * 0.001;
+      lastT = now;
+      fc++;
+      if (fc % 24 === 0 && fpsElem) {
+        fpsElem.textContent = `${Math.min(144, Math.max(30, Math.round(1.0 / Math.max(0.001, delta))))} FPS`;
+      }
+
+      material.uniforms.uTime.value = elapsed;
+      material.uniforms.uMouseWorld.value.lerp(targetMouseWorld, 0.12);
+      material.uniforms.uHoverIntensity.value = THREE.MathUtils.lerp(material.uniforms.uHoverIntensity.value, targetHoverIntensity, 0.08);
+
+      const prog = material.uniforms.uProgress.value;
+      const polyWeight = Math.max(0.0, 1.0 - Math.abs(prog - 2.0) * 1.25);
+      polyGroup.visible = polyWeight > 0.001;
+
+      if (polyGroup.visible) {
+        const isLight = currentTheme === 'B';
+        polyGroup.children.forEach((pGroup) => {
+          pGroup.rotation.x += pGroup.userData.rotSpeedX;
+          pGroup.rotation.y += pGroup.userData.rotSpeedY;
+          pGroup.rotation.z += pGroup.userData.rotSpeedZ;
+          pGroup.position.z = pGroup.userData.initialZ +
+            Math.sin(elapsed * pGroup.userData.floatFreq + pGroup.userData.floatPhase) * 0.25;
+
+          // Theme-responsive styling for wireframes & crystal facets
+          pGroup.userData.lineMat.color.setHex(isLight ? 0x242830 : 0xffffff);
+          pGroup.userData.dotMat.color.setHex(isLight ? 0x14161a : 0xffffff);
+          pGroup.userData.lineMat.blending = isLight ? THREE.NormalBlending : THREE.AdditiveBlending;
+          pGroup.userData.dotMat.blending = isLight ? THREE.NormalBlending : THREE.AdditiveBlending;
+          pGroup.userData.faceMat.color.setHex(isLight ? 0x9ba6b4 : 0xdae6f2);
+
+          pGroup.userData.faceMat.opacity = pGroup.userData.baseFaceOpacity * polyWeight;
+          pGroup.userData.lineMat.opacity = pGroup.userData.baseLineOpacity * polyWeight;
+          pGroup.userData.dotMat.opacity = pGroup.userData.baseDotOpacity * polyWeight;
+        });
+      }
+
+      renderer.render(scene, camera);
+    }
+    loop();
+  </script>
+</body>
+</html>

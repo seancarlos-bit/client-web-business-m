@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BRAINWEB — 3D Particle Scrollytelling & Collective Intelligence</title>
+  <meta name="description" content="Awwwards-grade 3D particle scrollytelling experience morphing 36,000 GPU particles across intelligence, chaos, ideation, and planetary reach." />
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cpolygon points='16,4 28,28 4,28' fill='%23ffffff'/%3E%3C/svg%3E" />
+  <link rel="stylesheet" href="./src/style.css" />
+</head>
+<body>
+  <!-- Fixed Fullscreen WebGL 3D Canvas -->
+  <canvas id="webgl-canvas"></canvas>
+
+  <!-- Editorial Top Navbar -->
+  <header class="header-nav">
+    <a href="#act-0" class="brand-wrapper" aria-label="Brainweb Homepage">
+      <svg class="brand-glyph" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+        <polygon points="12 2 22 20 2 20 12 2"></polygon>
+      </svg>
+      <span class="brand-title">BRAINWEB</span>
+    </a>
+
+    <!-- Center Navigation Links -->
+    <nav class="nav-center-links" aria-label="Main Navigation">
+      <a href="#act-0" class="nav-link active" data-stage="0">ATLAS</a>
+      <a href="#act-2" class="nav-link" data-stage="2">ENTROPY</a>
+      <a href="#act-3" class="nav-link" data-stage="3">IGNITION</a>
+      <a href="#act-4" class="nav-link" data-stage="4">NETWORK</a>
+    </nav>
+
+    <!-- Right Controls -->
+    <div class="nav-actions">
+      <div class="nav-pill-telemetry" aria-label="Live Telemetry">
+        <span class="telemetry-live-dot">●</span>
+        <span id="fps-val">144 FPS</span>
+        <span class="telemetry-sep">|</span>
+        <span>36K SYNAPSES</span>
+      </div>
+      <button id="audio-toggle-btn" class="nav-pill-audio" aria-label="Toggle Synthesizer Tone" type="button">
+        <span class="audio-waves-icon">···</span>
+        <span class="audio-label">AUDIO</span>
+      </button>
+      <button id="theme-toggle-btn" class="nav-pill-theme" aria-label="Toggle Aesthetic Edition" type="button">
+        <span class="theme-icon">◐</span>
+        <span id="theme-label" class="theme-label">EDITION A</span>
+      </button>
+      <a href="#act-4" class="cta-pill-btn">REQUEST ACCESS</a>
+    </div>
+  </header>
+
+  <!-- Floating Right Stage Indicator Badge -->
+  <aside class="floating-stage-badge" id="floating-stage-badge" aria-label="Current Stage Indicator">
+    <span class="stage-badge-label" id="stage-badge-label">01 // ATLAS COGNITION</span>
+    <span class="stage-badge-dot">●</span>
+  </aside>
+
+  <!-- Subtle Vertical Scrollytracker Dots Rail -->
+  <aside class="scrolly-tracker-rail" aria-label="Story Stage Tracker">
+    <div class="tracker-item active" data-target="act-0" title="Atlas">
+      <div class="tracker-dot"></div>
+    </div>
+    <div class="tracker-item" data-target="act-1" title="Profile">
+      <div class="tracker-dot"></div>
+    </div>
+    <div class="tracker-item" data-target="act-2" title="Entropy">
+      <div class="tracker-dot"></div>
+    </div>
+    <div class="tracker-item" data-target="act-3" title="Ignition">
+      <div class="tracker-dot"></div>
+    </div>
+    <div class="tracker-item" data-target="act-4" title="Network">
+      <div class="tracker-dot"></div>
+    </div>
+  </aside>
+
+  <!-- Mouse Hover Interaction Hint -->
+  <div class="hover-hint">
+    <span>✦</span> Hover model for localized surface tension
+  </div>
+
+  <!-- Scrollytelling Story Container (4 Narrative Moments) -->
+  <main class="scroll-container">
+    
+    <!-- ACT 1: Section 0 (p = 0.0) — Atlas / Intelligence -->
+    <section id="act-0" class="story-section section-left">
+      <div class="content-block">
+        <div class="frosted-obsidian-card align-left">
+          <span class="eyebrow-tag">ACT 01 // ATLAS COGNITION</span>
+          <h1 class="editorial-headline">
+            Unlock collective<br>wisdom.
+          </h1>
+          <p class="editorial-body">
+            Deep within the architectural folds of the human mind lies the blueprint for breakthrough execution. Symmetrical cerebral hemispheres pulsing with 36,000 GPU particles, synchronizing raw instinct into structured intuition.
+          </p>
+          <div class="card-action-wrap">
+            <a href="#act-1" class="witness-coherence-btn">Analyze Lateral Cortex &darr;</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ACT 1.5: Section 1 (p = 1.0) — Lateral Profile -->
+    <section id="act-1" class="story-section section-right">
+      <div class="content-block">
+        <div class="frosted-obsidian-card align-left">
+          <span class="eyebrow-tag">ACT 01.5 // PERSPECTIVE SHIFT</span>
+          <h2 class="editorial-headline">
+            Make decisions with<br>confidence.
+          </h2>
+          <p class="editorial-body">
+            Rotating to the lateral cortex. Deep gyri and sulci ridges modulate light across view-space Fresnel vectors. Complex problems dissolve when observed from the unhurried vantage point of architectural mastery.
+          </p>
+          <div class="card-action-wrap">
+            <a href="#act-2" class="witness-coherence-btn">Descend Into Entropy &darr;</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ACT 2: Section 2 (p = 2.0) — Workplace Entropy / Chaos Field -->
+    <section id="act-2" class="story-section section-center">
+      <div class="content-block">
+        <div class="frosted-obsidian-card">
+          <span class="eyebrow-tag">THE COST OF DISPERSAL</span>
+          <h2 class="editorial-headline chaos-title">
+            The impossible battle<br>
+            to make sense of this<br>
+            chaos.
+          </h2>
+          <p class="editorial-body chaos-paragraph">
+            Teams are confronted with the anxiety of bothering a busy coworker again, or aimlessly trying to connect the dots with incomplete context. Existing solutions are cumbersome and quickly become outdated. Yet another decaying system requiring continuous maintenance.
+          </p>
+          <div class="entropy-pills-grid">
+            <div class="entropy-pill">
+              <span class="pill-bullet">●</span>
+              <span>Fragmented Slack Threads</span>
+            </div>
+            <div class="entropy-pill">
+              <span class="pill-bullet">●</span>
+              <span>Stale Notion &amp; Confluence Docs</span>
+            </div>
+            <div class="entropy-pill">
+              <span class="pill-bullet">●</span>
+              <span>Orphaned Code Commits</span>
+            </div>
+            <div class="entropy-pill">
+              <span class="pill-bullet">●</span>
+              <span>Context Switching Debt</span>
+            </div>
+          </div>
+          <div class="card-action-wrap">
+            <a href="#act-3" class="witness-coherence-btn">Witness Coherence &darr;</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ACT 3: Section 3 (p = 3.0) — The Idea (Vintage Edison Bulb) -->
+    <section id="act-3" class="story-section section-right">
+      <div class="content-block">
+        <div class="frosted-obsidian-card align-left">
+          <span class="eyebrow-tag">ACT 03 // CLARITY IGNITION</span>
+          <h2 class="editorial-headline">
+            Spark lightbulb<br>moments.
+          </h2>
+          <p class="editorial-body">
+            From the swirling particulate cloud emerges a vintage Edison envelope tilted at -28°. Inside, a dual-arch tungsten filament ignites with radiant warm amber, channeling clarity from the surrounding noise.
+          </p>
+          <div class="feature-cards-grid">
+            <div class="frosted-card">
+              <div class="card-number">01 / FILAMENT</div>
+              <div class="card-title">Pure Coherence</div>
+              <div class="card-desc">Non-blowing additive blending preserves rich internal sulci and filament details.</div>
+            </div>
+            <div class="frosted-card">
+              <div class="card-number">02 / FOCUS</div>
+              <div class="card-title">Instant Insight</div>
+              <div class="card-desc">View-space repulsion clears an organic halo around typography for uncompromising legibility.</div>
+            </div>
+          </div>
+          <div class="card-action-wrap" style="margin-top: 1.8rem;">
+            <a href="#act-4" class="witness-coherence-btn">Expand Planetary Network &darr;</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ACT 4: Section 4 (p = 4.0) — Planetary Globe (Global Reach) -->
+    <section id="act-4" class="story-section section-left">
+      <div class="content-block">
+        <div class="frosted-obsidian-card align-left">
+          <span class="eyebrow-tag">ACT 04 // PLANETARY HORIZON</span>
+          <h2 class="editorial-headline">
+            Build a better<br>world of work.
+          </h2>
+          <p class="editorial-body">
+            Ideas born in isolation achieve their destiny through planetary reach. The particles condense into a rotating spherical Fibonacci lattice with recognizable continental topography and coordinate orbital rings.
+          </p>
+          
+          <div class="terminal-card">
+            <div class="terminal-header">
+              <span class="terminal-dot"></span>
+              <span>ORBITAL TELEMETRY — LIVE CLUSTER 0x7E</span>
+            </div>
+            <div class="terminal-body">
+              <div class="term-line">
+                <span>ACTIVE NODES:</span>
+                <span class="term-val">36,000 SPH POINTS</span>
+              </div>
+              <div class="term-line">
+                <span>AXIAL INCLINATION:</span>
+                <span class="term-val">23.5° CORONAL TILT</span>
+              </div>
+              <div class="term-line">
+                <span>LANDMASS RESOLUTION:</span>
+                <span class="term-val">EURASIA / AMERICAS / AFRICA</span>
+              </div>
+              <div class="term-line">
+                <span>FRAME BUDGET:</span>
+                <span class="term-val">&lt; 6.9ms (144 FPS HARDWARE)</span>
+              </div>
+            </div>
+          </div>
+          <div class="card-action-wrap" style="margin-top: 1.8rem;">
+            <a href="#act-0" class="witness-coherence-btn">Ascend To Origin &uarr;</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <script type="module" src="./src/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,29 @@
+# Distribution build output
+dist/
+node_modules/
+**/node_modules/
+
+# Local backup and zip packets
+backups/
+*.zip
+
+# OS metadata
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editor & IDE directories
+.vscode/
+.idea/
+*.suo
+*.user
+
+# Temporary and log files
+*.tmp
+*.temp
+*.log
+
+# Environment / local secret configs if added in the future
+.env
+.env.local
+*.local.json

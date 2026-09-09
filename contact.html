@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Contact Us &bull; Vanguard STUDIO Direct Project Intake</title>
+  <meta name="description" content="Initiate your web project with Vanguard Studio. Direct email intake routed to vanguardstudio.sample@gmail.com with guaranteed 10–14 day delivery." />
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='16' fill='%23141311'/%3E%3Ctext x='16' y='21' font-family='serif' font-size='16' font-style='italic' fill='%23FAF9F6' text-anchor='middle'%3EV%3C/text%3E%3C/svg%3E" />
+  <link rel="stylesheet" href="assets/site.min.css" />
+</head>
+<body id="top" class="font-sans antialiased selection:bg-amber-400 selection:text-stone-950 bg-[#0d0c0b] text-[#ede9e1]">
+
+  <!-- HEADER -->
+  <header class="border-b border-white/10 bg-[#131211]/90 sticky top-0 z-40 backdrop-blur-md">
+    <div class="max-w-6xl mx-auto px-6 h-20 flex items-center justify-between">
+      <a href="index.html" class="flex items-center gap-3">
+        <span class="w-7 h-7 rounded-full bg-stone-50 flex items-center justify-center text-stone-950 font-serif italic text-sm font-bold">V</span>
+        <span class="font-serif text-lg tracking-tight font-medium text-white">Vanguard <span class="text-amber-400 font-sans text-xs tracking-widest uppercase ml-1">STUDIO</span></span>
+      </a>
+      <a href="index.html" class="text-xs font-mono uppercase tracking-widest text-stone-300 hover:text-white font-semibold">&larr; Return Home</a>
+    </div>
+  </header>
+
+  <!-- MAIN CONTACT INTAKE FORM -->
+  <main id="main-content" class="py-20 max-w-3xl mx-auto px-6">
+    <div class="text-center mb-12">
+      <span class="text-xs font-mono uppercase tracking-widest text-amber-400 font-semibold">Direct Intake &bull; 24h SLA</span>
+      <h1 class="font-serif text-4xl sm:text-5xl text-white font-normal mt-2">Start a Conversation</h1>
+      <p class="text-sm text-stone-300 mt-4 leading-relaxed max-w-lg mx-auto">
+        Tell us about your business and what the website needs to do. Direct intake routes to <strong class="text-white font-mono">vanguardstudio.sample@gmail.com</strong>.
+      </p>
+      <p class="text-xs text-stone-400 mt-2 font-mono italic">
+        We use enquiry details to respond about your project. Please leave out passwords, payment information, and sensitive records.
+      </p>
+    </div>
+
+    <!-- INTAKE FORM MOUNT -->
+    <form id="contactForm" action="https://formsubmit.co/sean.rcarlos@gmail.com" data-ajax-endpoint="https://formsubmit.co/ajax/sean.rcarlos@gmail.com" method="POST" enctype="multipart/form-data" class="cool-gray-glass rounded-3xl p-8 sm:p-10 space-y-6 border border-white/15 shadow-2xl" novalidate>
+      
+      <!-- Hidden Scope Payload Passed to Contact Form -->
+      <input type="hidden" id="hiddenSelectedScope" name="selectedScope" value="Business website ($1,499)">
+      <input type="hidden" id="hiddenEstimatedTotal" name="estimatedTotal" value="$1,499">
+      <input type="hidden" id="hiddenEstimatedMonthly" name="estimatedMonthly" value="$0/mo">
+      <input type="hidden" id="hiddenSelectedAddons" name="selectedAddons" value="None">
+      <input type="hidden" id="estimateSummary" name="estimate" value="Business website: USD 1499 one-time; USD 0/month. Indicative only.">
+      <input type="hidden" name="_subject" value="Vanguard Studio Direct Project Inquiry">
+      <input type="hidden" name="_template" value="table">
+
+      <!-- Anti-Spam Honeypot -->
+      <div class="hidden" aria-hidden="true">
+        <label for="formGotcha">Do not fill this field</label>
+        <input type="text" id="formGotcha" name="_gotcha" tabindex="-1" autocomplete="off" />
+      </div>
+
+      <!-- Accessible Status Notification Container -->
+      <div id="formStatus" class="hidden text-sm rounded-xl p-4 font-mono transition-all" role="status" aria-live="polite"></div>
+
+      <div>
+        <label for="formName" class="block text-xs font-mono uppercase tracking-widest text-amber-400 mb-2 font-semibold">
+          Full Name <span class="text-amber-400" aria-hidden="true">*</span>
+        </label>
+        <input id="formName" name="name" type="text" required maxlength="100" placeholder="Marcus Vance" autocomplete="name" class="w-full bg-stone-900/90 border border-white/15 rounded-xl px-4 py-3.5 text-sm text-white placeholder-stone-500 focus:outline-none focus:border-amber-400 font-mono transition-colors">
+      </div>
+
+      <div>
+        <label for="formEmail" class="block text-xs font-mono uppercase tracking-widest text-amber-400 mb-2 font-semibold">
+          Email Address <span class="text-amber-400" aria-hidden="true">*</span>
+        </label>
+        <input id="formEmail" name="email" type="email" required maxlength="254" placeholder="marcus@company.com" autocomplete="email" class="w-full bg-stone-900/90 border border-white/15 rounded-xl px-4 py-3.5 text-sm text-white placeholder-stone-500 focus:outline-none focus:border-amber-400 font-mono transition-colors">
+      </div>
+
+      <div>
+        <label for="formWebsite" class="block text-xs font-mono uppercase tracking-widest text-amber-400 mb-2 font-semibold">
+          Business Name or Website <span class="text-stone-400 font-sans text-xs lowercase">(optional)</span>
+        </label>
+        <input id="formWebsite" name="business" type="text" maxlength="200" placeholder="https://example.com" class="w-full bg-stone-900/90 border border-white/15 rounded-xl px-4 py-3.5 text-sm text-white placeholder-stone-500 focus:outline-none focus:border-amber-400 font-mono transition-colors">
+      </div>
+
+      <div>
+        <label for="formNotes" class="block text-xs font-mono uppercase tracking-widest text-amber-400 mb-2 font-semibold">
+          Project Scope / Message <span class="text-amber-400" aria-hidden="true">*</span>
+        </label>
+        <textarea id="formNotes" name="message" required minlength="10" maxlength="3000" rows="4" placeholder="What do you do, and what should the website help with?" class="w-full bg-stone-900/90 border border-white/15 rounded-xl px-4 py-3.5 text-sm text-white placeholder-stone-500 focus:outline-none focus:border-amber-400 font-mono transition-colors"></textarea>
+      </div>
+
+      <button id="formSubmitBtn" type="submit" class="inline-flex items-center justify-center min-h-[48px] w-full py-4 rounded-xl bg-stone-50 text-stone-950 text-xs font-mono uppercase tracking-wider font-bold hover:bg-amber-300 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-amber-400 mt-2 shadow-xl">
+        Send project enquiry &rarr;
+      </button>
+    </form>
+  </main>
+
+  <footer class="border-t border-white/10 py-8 bg-[#131211] text-center text-xs font-mono text-stone-400">
+    &copy; 2026 VANGUARD STUDIO. ALL RIGHTS RESERVED. Direct contact: vanguardstudio.sample@gmail.com
+  </footer>
+
+  <div id="livechat-container"></div>
+  <script src="js/calculator.js"></script>
+  <script src="js/form.js"></script>
+  <script src="js/livechat.js"></script>
+</body>
+</html>
